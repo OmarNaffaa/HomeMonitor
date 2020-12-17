@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\1_College\Gtkmm\OmarHub\ButtonRow.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\1_College\Gtkmm\OmarHub\main.cpp">
+    <ClCompile Include="MainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\1_College\Gtkmm\OmarHub\MainWindow.cpp">
+    <ClCompile Include="DrawingArea.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\1_College\Gtkmm\OmarHub\ButtonRow.h">
+    <ClInclude Include="MainWindow.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\1_College\Gtkmm\OmarHub\MainWindow.h">
+    <ClInclude Include="DrawingArea.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

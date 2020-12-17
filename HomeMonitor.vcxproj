@@ -18,6 +18,15 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DrawingArea.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DrawingArea.h" />
+    <ClInclude Include="MainWindow.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -138,15 +147,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\1_College\Gtkmm\OmarHub\ButtonRow.cpp" />
-    <ClCompile Include="..\..\1_College\Gtkmm\OmarHub\main.cpp" />
-    <ClCompile Include="..\..\1_College\Gtkmm\OmarHub\MainWindow.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\1_College\Gtkmm\OmarHub\ButtonRow.h" />
-    <ClInclude Include="..\..\1_College\Gtkmm\OmarHub\MainWindow.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

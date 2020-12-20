@@ -1,12 +1,8 @@
 #include "MainWindow.h"
 #include <iostream>
 
-MainWindow::MainWindow()
+MainWindow::MainWindow() : screenHeight(480), screenWidth(640)
 {
-	// Initialize screen dimensions
-	screenHeight = 480;
-	screenWidth = 640;
-
 	// Initialize the main window
 	this->set_title("Homepage");
 	this->set_border_width(10);

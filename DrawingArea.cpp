@@ -2,17 +2,10 @@
 #include <iostream>
 using std::cout; using std::endl;
 
-MyArea::MyArea() 
-{
-	numRows = 10.0;
-	numCols = 10.0;
-}
+MyArea::MyArea() : numRows(10.0), numCols(10.0) {}
 
-MyArea::MyArea(double numOfRows, double numOfCols)
-{
-	numRows = numOfRows;
-	numCols = numOfCols;
-}
+MyArea::MyArea(double numOfRows, double numOfCols) :
+	numRows(numOfRows), numCols(numOfCols) {}
 
 MyArea::~MyArea() {}
 

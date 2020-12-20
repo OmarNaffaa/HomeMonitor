@@ -6,11 +6,16 @@
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/cssprovider.h>
 
+using titleString = Glib::ustring; // alias
+
 class MainWindow : public Gtk::Window
 {
 public:
 	// Constructor and Deconstructor
 	MainWindow();
+	MainWindow(titleString windowTitle);
+	MainWindow(int dispWidth, int dispHeight);
+	MainWindow(int dispWidth, int dispHeight, titleString windowTitle);
 	virtual ~MainWindow();
 
 	// Functions
@@ -22,6 +27,7 @@ public:
 protected:
 	int screenWidth;
 	int screenHeight;
+	titleString screenTitle;
 };
 
 #endif // MAINWINDOW_H

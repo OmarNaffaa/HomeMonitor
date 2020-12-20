@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 	auto app = Gtk::Application::create(argc, argv);
 
 	auto mainContainer = Gtk::Box();
-	MainWindow homepage;
+	MainWindow homepage("Dashboard");
 
 	// Create drawing area and add to container
 	MyArea mArea(12.0, 8.0);

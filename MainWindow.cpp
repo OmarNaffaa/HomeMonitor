@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include <iostream>
+#include <string>
 
 MainWindow::MainWindow() : screenHeight(480), screenWidth(640)
 {
@@ -10,7 +11,8 @@ MainWindow::MainWindow() : screenHeight(480), screenWidth(640)
 	this->maximize();
 }
 
-MainWindow::MainWindow(titleString windowTitle) : screenTitle(windowTitle)
+MainWindow::MainWindow(titleString windowTitle) :
+	screenHeight(480), screenWidth(480), screenTitle(windowTitle)
 {
 	// Initialize the main window
 	this->set_title(screenTitle);

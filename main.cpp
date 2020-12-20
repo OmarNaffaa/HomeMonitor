@@ -27,13 +27,16 @@ void onConfig1(MyArea* dArea);
 void onConfig2(MyArea* dArea);
 void onConfig3(MyArea* dArea);
 
+// Utiltiy Functions
+Glib::ustring setCss();
+
 /*
 	!!! Main !!!
 */
 int main(int argc, char* argv[])
 {
 	auto app = Gtk::Application::create(argc, argv);
-	
+
 	auto mainContainer = Gtk::Box();
 	MainWindow homepage;
 
@@ -89,11 +92,11 @@ int main(int argc, char* argv[])
 	windowScroller.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	windowScroller.add(windowContainer);
 
-	// Load color settings from CSS file
+	// Load color settings from CSS file [FIX THIS]
 	auto cssProvider = Gtk::CssProvider::create();
-	cssProvider->load_from_path("CSS\\mainwindow.css");
 	auto styleContext = Gtk::StyleContext::create();
 	auto screen = Gdk::Screen::get_default();
+	cssProvider->load_from_data(setCss());
 	styleContext->add_provider_for_screen(screen, cssProvider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
 	// Add main container to window
@@ -108,6 +111,9 @@ int main(int argc, char* argv[])
 */
 void configButtons(Gtk::Button(&layoutBtn)[7])
 {
+	for (int i = 0; i < 7; ++i)
+		layoutBtn[i].set_name("optionBtns");
+
 	layoutBtn[0].add_label("My Bedroom");
 	layoutBtn[1].add_label("Upstairs Bedroom");
 	layoutBtn[2].add_label("Downstairs Bedroom");
@@ -179,4 +185,27 @@ void onConfig3(MyArea* dArea)
 {
 	// configuration to display 30 days of data
 	dArea->setNumOfGridCols(12.0);
+}
+
+Glib::ustring setCss()
+{
+	// Creates string to represent window CSS styling
+	Glib::ustring retVal = "";
+	
+	// title bar buttons
+	retVal += "button.titlebutton{padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;} ";
+	retVal += "button.titlebutton.maximize:hover{background:#BFBFBF;} ";
+	retVal += "button.titlebutton.minimize:hover{background:#BFBFBF;} ";
+	retVal += "button.titlebutton.close:hover{background:#C90000;} ";
+
+	// option buttons
+	retVal += "button label{color:white;font-family:sans-serif;font-size:20px;} ";
+	retVal += "#optionBtns{border-radius:12px;background:#000069;margin:10px;padding:5px;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5),0 6px 20px 0 rgba(0,0,0,0.5);} ";
+	retVal += "#optionBtns:hover{background:#3D3DAF;} ";
+
+	// Miscellaneous widget items
+	retVal += "#btnRowBox{background-color:#E5E5E5;} ";
+	retVal += "#mainMenuBar{background:#ADD8E6;} ";
+
+	return retVal;
 }

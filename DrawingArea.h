@@ -26,7 +26,6 @@ protected:
 	void drawAreaBorder(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height);
 	void drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height);
 	void labelArea(const Cairo::RefPtr< Cairo::Context >& cr, double xPos, double yPos, Glib::ustring msgLbl);
-	void determineColLbls(Glib::ustring(&lblArr)[11]);
 };
 
 #endif // MYAREA_H

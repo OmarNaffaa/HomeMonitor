@@ -79,25 +79,22 @@ void MyArea::drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int wid
 	cr->stroke();
 
 	// label grid rows and columns
-	Glib::ustring graphColIncrement[11];
-	determineColLbls(graphColIncrement);
-
 	Glib::ustring graphRowIncrement[] = { "30", "40", "50", "60", "70", "80", "90", "100", "110", "120" };
+	
+	Glib::ustring graphColIncrement;
+	if (numCols == 8.0) graphColIncrement = "Past 24 Hours";
+	else if (numCols == 9.0) graphColIncrement = "Past Week";
+	else graphColIncrement = "Past Month";
 
-	const double vertOffset = 10.0;
+	const double vertColOffset = 15.0;
+	const double vertRowOffset = 10.0;
 	const double horizOffset = 60.0;
 
-	for (int i = 0; i < (numCols - 1); ++i) // columns
-	{
-		labelArea(cr, (gridColNum + vertOffset), (height - gridRowNum + vertOffset), graphColIncrement[i]);
+	labelArea(cr, (width/2), (height - gridRowNum + vertColOffset), graphColIncrement); // x-axis label
 
-		gridColNum += (width / numCols);
-	}
-
-	gridColNum = width / numCols;
 	for (int i = (numRows - 3); i >= 0; --i) // rows
 	{
-		labelArea(cr, (gridColNum - horizOffset), (gridRowNum + vertOffset), (graphRowIncrement[i] + " F"));
+		labelArea(cr, (gridColNum - horizOffset), (gridRowNum + vertRowOffset), (graphRowIncrement[i] + " F"));
 
 		gridRowNum += (height / numRows);
 	}
@@ -110,7 +107,7 @@ void MyArea::labelArea(const Cairo::RefPtr< Cairo::Context >& cr, double xPos, d
 
 	Pango::FontDescription font;
 	font.set_family("Monospace");
-	font.set_size(16);
+	font.set_size(16.0);
 	font.set_weight(Pango::WEIGHT_BOLD);
 
 	auto layout = create_pango_layout(msgLbl);
@@ -125,40 +122,4 @@ void MyArea::setNumOfGridCols(double numOfCols)
 {
 	numCols = numOfCols;
 	this->queue_draw();
-}
-
-void MyArea::determineColLbls(Glib::ustring(&lblArr)[11])
-{
-	if (numCols == 8.0) // 24 hour rendering
-	{
-		lblArr[0] = "00:00";
-		lblArr[1] = "04:00";
-		lblArr[2] = "08:00";
-		lblArr[3] = "12:00";
-		lblArr[4] = "16:00";
-		lblArr[5] = "20:00";
-	}
-	else if (numCols == 9.0) // 7 day rendering
-	{
-		lblArr[0] = "Sun";
-		lblArr[1] = "Mon";
-		lblArr[2] = "Tue";
-		lblArr[3] = "Wed";
-		lblArr[4] = "Thu";
-		lblArr[5] = "Fri";
-		lblArr[6] = "Sat";
-	}
-	else // past 30 days rendering
-	{
-		lblArr[0] = "0";
-		lblArr[1] = "3";
-		lblArr[2] = "6";
-		lblArr[3] = "9";
-		lblArr[4] = "12";
-		lblArr[5] = "15";
-		lblArr[6] = "18";
-		lblArr[7] = "21";
-		lblArr[8] = "24";
-		lblArr[9] = "27";
-	}
 }

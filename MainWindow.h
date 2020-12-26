@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <iostream>
+#include <string>
 #include <gtkmm/window.h>
 #include <gdkmm/screen.h>
 #include <gtkmm/drawingarea.h>

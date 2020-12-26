@@ -22,10 +22,12 @@
     <ClCompile Include="DrawingArea.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="ThingSpeak.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawingArea.h" />
     <ClInclude Include="MainWindow.h" />
+    <ClInclude Include="ThingSpeak.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

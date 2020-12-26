@@ -24,12 +24,18 @@
     <ClCompile Include="DrawingArea.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ThingSpeak.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainWindow.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="DrawingArea.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThingSpeak.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

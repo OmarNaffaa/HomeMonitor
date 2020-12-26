@@ -1,6 +1,4 @@
 #include "MainWindow.h"
-#include <iostream>
-#include <string>
 
 MainWindow::MainWindow() : screenHeight(480), screenWidth(640)
 {

@@ -43,7 +43,7 @@ void MyArea::drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int wid
 	auto gridRowNum = height / numRows;
 
 	cr->set_line_width(1.0);
-	cr->set_source_rgb(0.7, 0.7, 0.7);
+	cr->set_source_rgb(0.75, 0.75, 0.75);
 
 	// draw grid columns
 	for (int i = 0; i < (numCols - 1); ++i)
@@ -90,7 +90,7 @@ void MyArea::drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int wid
 	const double vertRowOffset = 10.0;
 	const double horizOffset = 60.0;
 
-	labelArea(cr, (width/2), (height - gridRowNum + vertColOffset), graphColIncrement); // x-axis label
+	labelArea(cr, (width/2 - horizOffset), (height - gridRowNum + vertColOffset), graphColIncrement); // x-axis label
 
 	for (int i = (numRows - 3); i >= 0; --i) // rows
 	{
@@ -106,8 +106,8 @@ void MyArea::labelArea(const Cairo::RefPtr< Cairo::Context >& cr, double xPos, d
 	int txtHeight;
 
 	Pango::FontDescription font;
-	font.set_family("Monospace");
-	font.set_size(16.0);
+	font.set_family("Roboto Slab");
+	font.set_absolute_size(20.0 * PANGO_SCALE);
 	font.set_weight(Pango::WEIGHT_BOLD);
 
 	auto layout = create_pango_layout(msgLbl);
@@ -122,4 +122,25 @@ void MyArea::setNumOfGridCols(double numOfCols)
 {
 	numCols = numOfCols;
 	this->queue_draw();
+}
+
+// Obtained online, used for debugging font selection
+void MyArea::listAvailableFonts()
+{
+	int i;
+	PangoFontFamily** families;
+	int n_families;
+	PangoFontMap* fontmap;
+
+	fontmap = pango_cairo_font_map_get_default();
+	pango_font_map_list_families(fontmap, &families, &n_families);
+	printf("There are %d families\n", n_families);
+	for (i = 0; i < n_families; i++) {
+		PangoFontFamily* family = families[i];
+		const char* family_name;
+
+		family_name = pango_font_family_get_name(family);
+		printf("Family %d: %s\n", i, family_name);
+	}
+	g_free(families);
 }

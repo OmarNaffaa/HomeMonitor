@@ -16,6 +16,9 @@ ThingSpeak::~ThingSpeak() {}
 
 void ThingSpeak::getChannelData()
 {
+    // clear previous data before storing new set
+    fieldResults.clear();
+
     CURL* curl = curl_easy_init();
 
     // Set remote URL.

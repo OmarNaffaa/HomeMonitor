@@ -55,4 +55,4 @@ int MainWindow::getScreenWidth()
 int MainWindow::getScreenHeight()
 {
 	return screenHeight;
-}
+} 

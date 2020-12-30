@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 
 #include <gtkmm/Application.h>
 #include <gtkmm/button.h>
@@ -7,9 +8,11 @@
 #include <gtkmm/menu.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/menuitem.h>
+#include <glibmm/dispatcher.h>
 
 #include "MainWindow.h"
 #include "DrawingArea.h"
+#include "ThingSpeak.h"
 
 // Widget Definition Function Prototypes
 void configButtons(Gtk::Button (&layoutBtn)[7]);
@@ -22,13 +25,19 @@ void onBtn3(Glib::ustring btnPressed);
 void onBtn4(Glib::ustring btnPressed);
 void onBtn5(Glib::ustring btnPressed);
 void onBtn6(Glib::ustring btnPressed);
+void onConfig1(MyArea *dArea); // 24 hrs
+void onConfig2(MyArea *dArea); // 7 days
+void onConfig3(MyArea *dArea); // 1 month
 
-void onConfig1(MyArea* dArea);
-void onConfig2(MyArea* dArea);
-void onConfig3(MyArea* dArea);
+// General Functions
+void asyncPolling(MyArea *dArea, int delayInMinutes);
 
 // Utiltiy Functions
 Glib::ustring setCss();
+
+// Create global ThingSpeak polling object
+char tsUrl[] = "https://api.thingspeak.com/channels/544573/feeds.json?api_key=BAY5Y9HPFP6V3C6G&results=24";
+ThingSpeak tsPoller(tsUrl);
 
 /*
 	!!! Main !!!
@@ -92,7 +101,10 @@ int main(int argc, char* argv[])
 	windowScroller.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	windowScroller.add(windowContainer);
 
-	// Load color settings from CSS file [FIX THIS]
+	// Create thread to poll ThingSpeak asynchronously
+	asyncPolling(&mArea, 15);
+
+	// Load color settings from CSS file
 	auto cssProvider = Gtk::CssProvider::create();
 	auto styleContext = Gtk::StyleContext::create();
 	auto screen = Gdk::Screen::get_default();
@@ -173,18 +185,50 @@ void onConfig1(MyArea* dArea)
 {
 	// configuration to display 24 hours of data
 	dArea->setNumOfGridCols(8.0);
+
+	// (24 hours with 1 hour resolution = 24 points)
+	const char *dayUrl = "https://api.thingspeak.com/channels/544573/feeds.json?api_key=BAY5Y9HPFP6V3C6G&results=24";
+	tsPoller.setUrl(dayUrl);
 }
 
 void onConfig2(MyArea* dArea)
 {
 	// configuration to display 7 days of data
 	dArea->setNumOfGridCols(9.0);
+
+	// (24 points per day for 7 days = 168 points)
+	const char weeklyUrl[] = "https://api.thingspeak.com/channels/544573/feeds.json?api_key=BAY5Y9HPFP6V3C6G&results=168";
+	tsPoller.setUrl(weeklyUrl);
 }
 
 void onConfig3(MyArea* dArea)
 {
 	// configuration to display 30 days of data
 	dArea->setNumOfGridCols(12.0);
+
+	// (168 points per day for 30 days = 5040 points)
+	const char monthlyUrl[] = "https://api.thingspeak.com/channels/544573/feeds.json?api_key=BAY5Y9HPFP6V3C6G&results=5040";
+	tsPoller.setUrl(monthlyUrl);
+}
+
+void asyncPolling(MyArea* dArea, int delayInMinutes)
+{
+
+	const unsigned int minsToMs = 60000;
+	std::thread([dArea, delayInMinutes, minsToMs]()
+		{
+			while (true)
+			{
+				auto t = std::chrono::steady_clock::now() + std::chrono::milliseconds(delayInMinutes*minsToMs);
+
+				tsPoller.getChannelData();
+				tsPoller.printData();
+				dArea->queue_draw();
+
+				std::this_thread::sleep_until(t);
+			}
+		}
+	).detach();
 }
 
 Glib::ustring setCss()

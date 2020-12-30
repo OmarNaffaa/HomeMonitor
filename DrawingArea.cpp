@@ -19,6 +19,9 @@ bool MyArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	drawAreaGrid(cr, dAreaWidth, dAreaHeight);
 	drawAreaBorder(cr, dAreaWidth, dAreaHeight);
 
+	// plot current thingspeak data
+	plotThingSpeakData(cr, dAreaWidth, dAreaHeight);
+
 	return true;
 }
 
@@ -98,6 +101,25 @@ void MyArea::drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int wid
 
 		gridRowNum += (height / numRows);
 	}
+}
+
+void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height)
+{
+	// determine graph boundaries
+	auto gridHorizLeft = width / numCols;
+	auto gridHorizRight = width - (width / numCols);
+	auto gridVertTop = height / numRows;
+	auto gridVertBottom = height - (height / numRows);
+
+	cr->set_line_width(2);
+	cr->set_source_rgb(1.0, 0.0, 0.0);
+
+	// TODO: Create plotting logic for graph
+	cr->move_to(gridHorizLeft, gridVertTop);
+	cr->line_to(gridHorizRight, gridVertBottom);
+	cr->stroke();
+
+	
 }
 
 void MyArea::labelArea(const Cairo::RefPtr< Cairo::Context >& cr, double xPos, double yPos, Glib::ustring msgLbl)

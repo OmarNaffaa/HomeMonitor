@@ -20,10 +20,11 @@ class ThingSpeak
 {
 public:
 	// Constructor and deconstructor
-	ThingSpeak(const char* url);
+	ThingSpeak(char* url);
 	~ThingSpeak();
 
 	// Functions
+	void setUrl(const char *url);
 	void getChannelData();
 	void printData();
 
@@ -31,6 +32,7 @@ protected:
 	const char* thingspeakUrl;
 	map<string, string> currResult;
 	vector<map<string, string>> fieldResults;
+	friend class DrawingArea;
 };
 
 #endif // THINGSPEAK_H

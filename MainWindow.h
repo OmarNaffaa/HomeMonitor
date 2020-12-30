@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <string>
+#include <chrono>
+#include <functional>
+
 #include <gtkmm/window.h>
 #include <gdkmm/screen.h>
 #include <gtkmm/drawingarea.h>
@@ -25,8 +28,8 @@ public:
 	int getScreenHeight();
 	void determineScreenDimensions();
 
-
 protected:
+	// members
 	int screenWidth;
 	int screenHeight;
 	titleString screenTitle;

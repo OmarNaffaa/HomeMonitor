@@ -2,10 +2,14 @@
 #define MYAREA_H
 
 #include <vector>
+#include <map>
+#include <string>
 #include <gtkmm/drawingarea.h>
 #include <cairomm/context.h>
 #include <glib.h>
 #include <pango/pangocairo.h>
+
+#include "ThingSpeak.h"
 
 class MyArea : public Gtk::DrawingArea
 {
@@ -28,6 +32,7 @@ protected:
 	// main functions
 	void drawAreaBorder(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height);
 	void drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height);
+	void plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height);
 	void labelArea(const Cairo::RefPtr< Cairo::Context >& cr, double xPos, double yPos, Glib::ustring msgLbl);
 };
 

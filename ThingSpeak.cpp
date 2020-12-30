@@ -10,9 +10,14 @@ namespace
     }
 }
 
-ThingSpeak::ThingSpeak(const char* url) : thingspeakUrl(url) {}
+ThingSpeak::ThingSpeak(char* url) : thingspeakUrl(url) {}
 
 ThingSpeak::~ThingSpeak() {}
+
+void ThingSpeak::setUrl(const char *url)
+{
+    thingspeakUrl = url;
+}
 
 void ThingSpeak::getChannelData()
 {

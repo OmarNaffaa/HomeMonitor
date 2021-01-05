@@ -110,3 +110,8 @@ void ThingSpeak::printData()
         cout << endl;
     }
 }
+
+vector<map<string, string>> ThingSpeak::getFieldResults()
+{
+    return fieldResults;
+}

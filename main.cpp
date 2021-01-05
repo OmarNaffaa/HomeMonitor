@@ -222,7 +222,7 @@ void asyncPolling(MyArea* dArea, int delayInMinutes)
 				auto t = std::chrono::steady_clock::now() + std::chrono::milliseconds(delayInMinutes*minsToMs);
 
 				tsPoller.getChannelData();
-				tsPoller.printData();
+				dArea->getFieldData(tsPoller);
 				dArea->queue_draw();
 
 				std::this_thread::sleep_until(t);

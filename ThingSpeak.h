@@ -25,14 +25,14 @@ public:
 
 	// Functions
 	void setUrl(const char *url);
-	void getChannelData();
 	void printData();
+	void getChannelData();
+	vector<map<string, string>> getFieldResults();
 
 protected:
 	const char* thingspeakUrl;
 	map<string, string> currResult;
 	vector<map<string, string>> fieldResults;
-	friend class DrawingArea;
 };
 
 #endif // THINGSPEAK_H

@@ -14,20 +14,21 @@
 class MyArea : public Gtk::DrawingArea
 {
 public:
+	// Constructors and deconstructor
 	MyArea();
 	MyArea(double numOfRows, double numOfCols);
-
 	virtual ~MyArea();
 
 	void setNumOfGridCols(double numOfCols);
 	void listAvailableFonts();
 	// Used to get data from ThingSpeak class (fieldNum must be between 1 and 8)
 	void getFieldData(ThingSpeak tsObj);
+	bool toggleField(int fieldNum);
 
 protected:
 	double numRows;
 	double numCols;
-	int amntOfPoints;
+	int fieldEnable[8] = { 1, 0, 0, 0, 0, 0, 0, 0 }; // determines which fields should be plotted
 	vector<float> field1, field2, field3, field4, field5, field6, field7, field8;
 
 	// Override default signal handler:
@@ -38,7 +39,6 @@ protected:
 	void drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height);
 	void plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height);
 	void labelArea(const Cairo::RefPtr< Cairo::Context >& cr, double xPos, double yPos, Glib::ustring msgLbl);
-
 };
 
 #endif // MYAREA_H

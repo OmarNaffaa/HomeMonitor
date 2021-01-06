@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <mutex>
 
 #include <gtkmm/Application.h>
 #include <gtkmm/button.h>
@@ -15,29 +16,33 @@
 #include "ThingSpeak.h"
 
 // Widget Definition Function Prototypes
-void configButtons(Gtk::Button (&layoutBtn)[7]);
+void configButtons(Gtk::Button (&layoutBtn)[7], MyArea* dArea);
 
 // Signal Handlers
-void onBtn0(Glib::ustring btnPressed);
-void onBtn1(Glib::ustring btnPressed);
-void onBtn2(Glib::ustring btnPressed);
-void onBtn3(Glib::ustring btnPressed);
-void onBtn4(Glib::ustring btnPressed);
-void onBtn5(Glib::ustring btnPressed);
-void onBtn6(Glib::ustring btnPressed);
-void onConfig1(MyArea *dArea); // 24 hrs
-void onConfig2(MyArea *dArea); // 7 days
-void onConfig3(MyArea *dArea); // 1 month
+void onConfig1(MyArea* dArea); // 24 hrs
+void onConfig2(MyArea* dArea); // 7 days
+void onBtn0(MyArea* dArea);
+void onBtn1(MyArea* dArea);
+void onBtn2(MyArea* dArea);
+void onBtn3(MyArea* dArea);
+void onBtn4(MyArea* dArea);
+void onBtn5(MyArea* dArea);
+void onBtn6(MyArea* dArea);
 
-// General Functions
+// Threading Functions
+std::mutex pollingMutex;
 void asyncPolling(MyArea *dArea, int delayInMinutes);
 
 // Utiltiy Functions
 Glib::ustring setCss();
 
-// Create global ThingSpeak polling object
-char tsUrl[] = "https://api.thingspeak.com/channels/544573/feeds.json?api_key=BAY5Y9HPFP6V3C6G&results=24";
-ThingSpeak tsPoller(tsUrl);
+/* 
+	Thingspeak URLs
+*/
+char tsDayUrl[] = "https://api.thingspeak.com/channels/544573/feeds.json?api_key=BAY5Y9HPFP6V3C6G&results=24";
+char tsWeeklyUrl[] = "https://api.thingspeak.com/channels/544573/feeds.json?api_key=BAY5Y9HPFP6V3C6G&results=168";
+
+ThingSpeak *tsPoller = new ThingSpeak(tsDayUrl);
 
 /*
 	!!! Main !!!
@@ -58,7 +63,7 @@ int main(int argc, char* argv[])
 	btnRowBox.set_name("btnRowBox");
 
 	Gtk::Button btn[7];
-	configButtons(btn);
+	configButtons(btn, &mArea);
 
 	btnRowBox.pack_start(btn[0], Gtk::PACK_EXPAND_WIDGET, 0);
 	btnRowBox.pack_start(btn[1], Gtk::PACK_EXPAND_WIDGET, 0);
@@ -87,10 +92,6 @@ int main(int argc, char* argv[])
 	subMenuItems.append(config2);
 	config2.signal_activate().connect(sigc::bind(sigc::ptr_fun(onConfig2), &mArea));
 
-	Gtk::MenuItem config3("Past month");
-	subMenuItems.append(config3);
-	config3.signal_activate().connect(sigc::bind(sigc::ptr_fun(onConfig3), &mArea));
-
 	// Pack menu and main container into 1 container
 	auto windowContainer = Gtk::VBox();
 	windowContainer.pack_start(menuBar, Gtk::PACK_SHRINK, 0);
@@ -102,7 +103,7 @@ int main(int argc, char* argv[])
 	windowScroller.add(windowContainer);
 
 	// Create thread to poll ThingSpeak asynchronously
-	asyncPolling(&mArea, 15);
+	asyncPolling(&mArea, 10);
 
 	// Load color settings from CSS file
 	auto cssProvider = Gtk::CssProvider::create();
@@ -121,7 +122,7 @@ int main(int argc, char* argv[])
 /*
 	Widget Configuration Function Definitions
 */
-void configButtons(Gtk::Button(&layoutBtn)[7])
+void configButtons(Gtk::Button(&layoutBtn)[7], MyArea* dArea)
 {
 	for (int i = 0; i < 7; ++i)
 		layoutBtn[i].set_name("optionBtns");
@@ -134,61 +135,35 @@ void configButtons(Gtk::Button(&layoutBtn)[7])
 	layoutBtn[5].add_label("Family Room");
 	layoutBtn[6].add_label("Kitchen");
 
-	layoutBtn[0].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn0), "0"));
-	layoutBtn[1].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn1), "1"));
-	layoutBtn[2].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn2), "2"));
-	layoutBtn[3].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn3), "3"));
-	layoutBtn[4].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn4), "4"));
-	layoutBtn[5].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn5), "5"));
-	layoutBtn[6].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn6), "6"));
+	layoutBtn[0].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn0), dArea));
+	layoutBtn[1].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn1), dArea));
+	layoutBtn[2].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn2), dArea));
+	layoutBtn[3].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn3), dArea));
+	layoutBtn[4].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn4), dArea));
+	layoutBtn[5].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn5), dArea));
+	layoutBtn[6].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn6), dArea));
 }
 
 /*
-	Button Signal Handler Definitions
+	Signal Handler Definitions
 */
-void onBtn0(Glib::ustring btnPressed)
-{
-	return;
-}
-
-void onBtn1(Glib::ustring btnPressed)
-{
-	return;
-}
-
-void onBtn2(Glib::ustring btnPressed)
-{
-	return;
-}
-
-void onBtn3(Glib::ustring btnPressed)
-{
-	return;
-}
-
-void onBtn4(Glib::ustring btnPressed)
-{
-	return;
-}
-
-void onBtn5(Glib::ustring btnPressed)
-{
-	return;
-}
-
-void onBtn6(Glib::ustring btnPressed)
-{
-	return;
-}
-
 void onConfig1(MyArea* dArea)
 {
 	// configuration to display 24 hours of data
 	dArea->setNumOfGridCols(8.0);
 
-	// (24 hours with 1 hour resolution = 24 points)
-	const char *dayUrl = "https://api.thingspeak.com/channels/544573/feeds.json?api_key=BAY5Y9HPFP6V3C6G&results=24";
-	tsPoller.setUrl(dayUrl);
+	// replace object with new poller
+	delete tsPoller;
+	tsPoller = new ThingSpeak(tsDayUrl);
+
+	// update data
+	pollingMutex.lock();
+
+	tsPoller->getChannelData();
+	dArea->getFieldData(*tsPoller);
+	dArea->queue_draw();
+
+	pollingMutex.unlock();
 }
 
 void onConfig2(MyArea* dArea)
@@ -196,24 +171,127 @@ void onConfig2(MyArea* dArea)
 	// configuration to display 7 days of data
 	dArea->setNumOfGridCols(9.0);
 
-	// (24 points per day for 7 days = 168 points)
-	const char weeklyUrl[] = "https://api.thingspeak.com/channels/544573/feeds.json?api_key=BAY5Y9HPFP6V3C6G&results=168";
-	tsPoller.setUrl(weeklyUrl);
+	// replace object with new poller
+	delete tsPoller;
+	tsPoller = new ThingSpeak(tsWeeklyUrl);
+
+	// update data
+	pollingMutex.lock();
+
+	tsPoller->getChannelData();
+	dArea->getFieldData(*tsPoller);
+	dArea->queue_draw();
+
+	pollingMutex.unlock();
 }
 
-void onConfig3(MyArea* dArea)
+void onBtn0(MyArea* dArea)
 {
-	// configuration to display 30 days of data
-	dArea->setNumOfGridCols(12.0);
+	// toggle thingspeak field 1
+	dArea->toggleField(0);
 
-	// (168 points per day for 30 days = 5040 points)
-	const char monthlyUrl[] = "https://api.thingspeak.com/channels/544573/feeds.json?api_key=BAY5Y9HPFP6V3C6G&results=5040";
-	tsPoller.setUrl(monthlyUrl);
+	// update chart
+	pollingMutex.lock();
+
+	tsPoller->getChannelData();
+	dArea->getFieldData(*tsPoller);
+	dArea->queue_draw();
+
+	pollingMutex.unlock();
+}
+
+void onBtn1(MyArea* dArea)
+{
+	// toggle thingspeak field 2
+	dArea->toggleField(1);
+
+	// update chart
+	pollingMutex.lock();
+
+	tsPoller->getChannelData();
+	dArea->getFieldData(*tsPoller);
+	dArea->queue_draw();
+
+	pollingMutex.unlock();
+}
+
+void onBtn2(MyArea* dArea)
+{
+	// toggle thingspeak field 3
+	dArea->toggleField(2);
+
+	// update chart
+	pollingMutex.lock();
+
+	tsPoller->getChannelData();
+	dArea->getFieldData(*tsPoller);
+	dArea->queue_draw();
+
+	pollingMutex.unlock();
+}
+
+void onBtn3(MyArea* dArea)
+{
+	// toggle thingspeak field 4
+	dArea->toggleField(3);
+
+	// update chart
+	pollingMutex.lock();
+
+	tsPoller->getChannelData();
+	dArea->getFieldData(*tsPoller);
+	dArea->queue_draw();
+
+	pollingMutex.unlock();
+}
+
+void onBtn4(MyArea* dArea)
+{
+	// toggle thingspeak field 5
+	dArea->toggleField(4);
+
+	// update chart
+	pollingMutex.lock();
+
+	tsPoller->getChannelData();
+	dArea->getFieldData(*tsPoller);
+	dArea->queue_draw();
+
+	pollingMutex.unlock();
+}
+
+void onBtn5(MyArea* dArea)
+{
+	// toggle thingspeak field 6
+	dArea->toggleField(5);
+
+	// update chart
+	pollingMutex.lock();
+
+	tsPoller->getChannelData();
+	dArea->getFieldData(*tsPoller);
+	dArea->queue_draw();
+
+	pollingMutex.unlock();
+}
+
+void onBtn6(MyArea* dArea)
+{
+	// toggle thingspeak field 7
+	dArea->toggleField(6);
+
+	// update chart
+	pollingMutex.lock();
+
+	tsPoller->getChannelData();
+	dArea->getFieldData(*tsPoller);
+	dArea->queue_draw();
+
+	pollingMutex.unlock();
 }
 
 void asyncPolling(MyArea* dArea, int delayInMinutes)
 {
-
 	const unsigned int minsToMs = 60000;
 	std::thread([dArea, delayInMinutes, minsToMs]()
 		{
@@ -221,9 +299,13 @@ void asyncPolling(MyArea* dArea, int delayInMinutes)
 			{
 				auto t = std::chrono::steady_clock::now() + std::chrono::milliseconds(delayInMinutes*minsToMs);
 
-				tsPoller.getChannelData();
-				dArea->getFieldData(tsPoller);
+				pollingMutex.lock();
+
+				tsPoller->getChannelData();
+				dArea->getFieldData(*tsPoller);
 				dArea->queue_draw();
+
+				pollingMutex.unlock();
 
 				std::this_thread::sleep_until(t);
 			}

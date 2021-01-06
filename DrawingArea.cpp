@@ -2,7 +2,7 @@
 #include <iostream>
 using std::cout; using std::endl;
 
-MyArea::MyArea() : numRows(10.0), numCols(10.0) {}
+MyArea::MyArea() : numRows(12.0), numCols(8.0) {}
 
 MyArea::MyArea(double numOfRows, double numOfCols) :
 	numRows(numOfRows), numCols(numOfCols) {}
@@ -86,8 +86,7 @@ void MyArea::drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int wid
 	
 	Glib::ustring graphColIncrement;
 	if (numCols == 8.0) graphColIncrement = "Past 24 Hours";
-	else if (numCols == 9.0) graphColIncrement = "Past Week";
-	else graphColIncrement = "Past Month";
+	if (numCols == 9.0) graphColIncrement = "Past Week";
 
 	const double vertColOffset = 15.0;
 	const double vertRowOffset = 10.0;
@@ -106,15 +105,14 @@ void MyArea::drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int wid
 void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height)
 {
 	// determine graph constants
+	int amntOfPoints;
 	const int tempRange = 100;
 	const float xAxisOffset = 20.0;
 
 	if ((numCols - 8.0) < 0.01)
 		amntOfPoints = 24;
-	else if ((numCols - 9.0) < 0.01)
+	if ((numCols - 9.0) < 0.01)
 		amntOfPoints = 168;
-	else
-		amntOfPoints = 5040;
 
 	auto gridHorizLeft = width / numCols;
 	auto gridHorizRight = width - (width / numCols);
@@ -124,144 +122,197 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 	auto vertSpacing = (gridVertBottom - gridVertTop) / tempRange;
 	auto horizSpacing = (gridHorizRight - gridHorizLeft) / amntOfPoints;
 
+	auto incVal = gridHorizLeft;
+
 	cr->set_line_width(3);
 
 	/*
 		Plotting logic for graph
 	*/
 	// Thingspeak field 1
-	cr->set_source_rgb(1.0, 0.0, 0.0);
-	auto incVal = gridHorizLeft;
-	double currPoint;
-	double prevPoint = field1[0];
-	for (int i = 1; i < field1.size(); ++i)
+	if (fieldEnable[0] == 1 && field1.size() > 1)
 	{
-		if (field1[i] != -1.0)
+		cr->set_source_rgb(1.0, 0.0, 0.0);
+		incVal = gridHorizLeft;
+		double currPoint;
+		double prevPoint = gridVertBottom - ((field1[0] - xAxisOffset) * vertSpacing);
+
+		for (int i = 1; i < field1.size(); ++i)
 		{
-			currPoint = gridVertBottom - ((field1[i] - xAxisOffset) * vertSpacing);
+			if (field1[i] > 19) // values must be at least 20
+			{
+				currPoint = gridVertBottom - ((field1[i] - xAxisOffset) * vertSpacing);
 
-			cr->move_to(incVal, prevPoint);
-			cr->line_to((incVal + horizSpacing), currPoint);
-			cr->stroke();
+				cr->move_to(incVal, prevPoint);
+				cr->line_to((incVal + horizSpacing), currPoint);
+				cr->stroke();
 
-			incVal += horizSpacing;
-			prevPoint = currPoint;
+				incVal += horizSpacing;
+				prevPoint = currPoint;
+			}
 		}
-	}	
-	/*
+	}
 	// Thingspeak field 2
-	incVal = gridHorizLeft;
-	for (int i = 0; i < (field2.size() - 1); ++i)
+	if (fieldEnable[1] == 1 && field2.size() > 1)
 	{
-		if (field2[i] != -1.0 && field2[i + 1] != -1.0)
+		cr->set_source_rgb(0.0, 0.8, 0.0);
+		incVal = gridHorizLeft;
+		double currPoint;
+		double prevPoint = gridVertBottom - ((field2[0] - xAxisOffset) * vertSpacing);
+
+		for (int i = 1; i < field2.size(); ++i)
 		{
-			valOne = gridVertBottom - ((field2[i] - xAxisOffset) * vertSpacing);
-			valTwo = gridVertBottom - ((field2[i + 1] - xAxisOffset) * vertSpacing);
+			if (field2[i] > 19) // values must be at least 20
+			{
+				currPoint = gridVertBottom - ((field2[i] - xAxisOffset) * vertSpacing);
 
-			cr->move_to(incVal, valOne);
-			cr->line_to((incVal + horizSpacing), valTwo);
-			cr->stroke();
+				cr->move_to(incVal, prevPoint);
+				cr->line_to((incVal + horizSpacing), currPoint);
+				cr->stroke();
 
-			incVal += horizSpacing;
+				incVal += horizSpacing;
+				prevPoint = currPoint;
+			}
 		}
 	}
 	// Thingspeak field 3
-	incVal = gridHorizLeft;
-	for (int i = 0; i < (field3.size() - 1); ++i)
+	if (fieldEnable[2] == 1 && field3.size() > 1)
 	{
-		if (field3[i] != -1.0 && field3[i + 1] != -1.0)
+		cr->set_source_rgb(0.0, 0.0, 1.0);
+		incVal = gridHorizLeft;
+		double currPoint;
+		double prevPoint = gridVertBottom - ((field3[0] - xAxisOffset) * vertSpacing);
+
+		for (int i = 1; i < field3.size(); ++i)
 		{
-			valOne = gridVertBottom - ((field3[i] - xAxisOffset) * vertSpacing);
-			valTwo = gridVertBottom - ((field3[i + 1] - xAxisOffset) * vertSpacing);
+			if (field3[i] > 19) // values must be at least 20
+			{
+				currPoint = gridVertBottom - ((field3[i] - xAxisOffset) * vertSpacing);
 
-			cr->move_to(incVal, valOne);
-			cr->line_to((incVal + horizSpacing), valTwo);
-			cr->stroke();
+				cr->move_to(incVal, prevPoint);
+				cr->line_to((incVal + horizSpacing), currPoint);
+				cr->stroke();
 
-			incVal += horizSpacing;
+				incVal += horizSpacing;
+				prevPoint = currPoint;
+			}
 		}
 	}
 	// Thingspeak field 4
-	incVal = gridHorizLeft;
-	for (int i = 0; i < (field4.size() - 1); ++i)
+	if (fieldEnable[3] == 1 && field4.size() > 1)
 	{
-		if (field4[i] != -1.0 && field4[i + 1] != -1.0)
+		cr->set_source_rgb(1.0, 0.0, 1.0);
+		incVal = gridHorizLeft;
+		double currPoint;
+		double prevPoint = gridVertBottom - ((field4[0] - xAxisOffset) * vertSpacing);
+
+		for (int i = 1; i < field4.size(); ++i)
 		{
-			valOne = gridVertBottom - ((field4[i] - xAxisOffset) * vertSpacing);
-			valTwo = gridVertBottom - ((field4[i + 1] - xAxisOffset) * vertSpacing);
+			if (field4[i] > 19) // values must be at least 20
+			{
+				currPoint = gridVertBottom - ((field4[i] - xAxisOffset) * vertSpacing);
 
-			cr->move_to(incVal, valOne);
-			cr->line_to((incVal + horizSpacing), valTwo);
-			cr->stroke();
+				cr->move_to(incVal, prevPoint);
+				cr->line_to((incVal + horizSpacing), currPoint);
+				cr->stroke();
 
-			incVal += horizSpacing;
+				incVal += horizSpacing;
+				prevPoint = currPoint;
+			}
 		}
 	}
 	// Thingspeak field 5
-	incVal = gridHorizLeft;
-	for (int i = 0; i < (field5.size() - 1); ++i)
+	if (fieldEnable[4] == 1 && field5.size() > 1)
 	{
-		if (field5[i] != -1.0 && field5[i + 1] != -1.0)
+		cr->set_source_rgb(0.6, 0.2, 1.0);
+		incVal = gridHorizLeft;
+		double currPoint;
+		double prevPoint = gridVertBottom - ((field5[0] - xAxisOffset) * vertSpacing);
+
+		for (int i = 1; i < field5.size(); ++i)
 		{
-			valOne = gridVertBottom - ((field5[i] - xAxisOffset) * vertSpacing);
-			valTwo = gridVertBottom - ((field5[i + 1] - xAxisOffset) * vertSpacing);
+			if (field5[i] > 19) // values must be at least 20
+			{
+				currPoint = gridVertBottom - ((field5[i] - xAxisOffset) * vertSpacing);
 
-			cr->move_to(incVal, valOne);
-			cr->line_to((incVal + horizSpacing), valTwo);
-			cr->stroke();
+				cr->move_to(incVal, prevPoint);
+				cr->line_to((incVal + horizSpacing), currPoint);
+				cr->stroke();
 
-			incVal += horizSpacing;
+				incVal += horizSpacing;
+				prevPoint = currPoint;
+			}
 		}
 	}
 	// Thingspeak field 6
-	incVal = gridHorizLeft;
-	for (int i = 0; i < (field6.size() - 1); ++i)
+	if (fieldEnable[5] == 1 && field6.size() > 1)
 	{
-		if (field6[i] != -1.0 && field6[i + 1] != -1.0)
+		cr->set_source_rgb(0.6, 0.6, 0.0);
+		incVal = gridHorizLeft;
+		double currPoint;
+		double prevPoint = gridVertBottom - ((field6[0] - xAxisOffset) * vertSpacing);
+
+		for (int i = 1; i < field6.size(); ++i)
 		{
-			valOne = gridVertBottom - ((field6[i] - xAxisOffset) * vertSpacing);
-			valTwo = gridVertBottom - ((field6[i + 1] - xAxisOffset) * vertSpacing);
+			if (field6[i] > 19) // values must be at least 20
+			{
+				currPoint = gridVertBottom - ((field6[i] - xAxisOffset) * vertSpacing);
 
-			cr->move_to(incVal, valOne);
-			cr->line_to((incVal + horizSpacing), valTwo);
-			cr->stroke();
+				cr->move_to(incVal, prevPoint);
+				cr->line_to((incVal + horizSpacing), currPoint);
+				cr->stroke();
 
-			incVal += horizSpacing;
+				incVal += horizSpacing;
+				prevPoint = currPoint;
+			}
 		}
 	}
 	// Thingspeak field 7
-	incVal = gridHorizLeft;
-	for (int i = 0; i < (field7.size() - 1); ++i)
+	if (fieldEnable[6] == 1 && field7.size() > 1)
 	{
-		if (field7[i] != -1.0 && field7[i + 1] != -1.0)
+		cr->set_source_rgb(0.0, 0.6, 0.6);
+		incVal = gridHorizLeft;
+		double currPoint;
+		double prevPoint = gridVertBottom - ((field7[0] - xAxisOffset) * vertSpacing);
+
+		for (int i = 1; i < field7.size(); ++i)
 		{
-			valOne = gridVertBottom - ((field7[i] - xAxisOffset) * vertSpacing);
-			valTwo = gridVertBottom - ((field7[i + 1] - xAxisOffset) * vertSpacing);
+			if (field7[i] > 19) // values must be at least 20
+			{
+				currPoint = gridVertBottom - ((field7[i] - xAxisOffset) * vertSpacing);
 
-			cr->move_to(incVal, valOne);
-			cr->line_to((incVal + horizSpacing), valTwo);
-			cr->stroke();
+				cr->move_to(incVal, prevPoint);
+				cr->line_to((incVal + horizSpacing), currPoint);
+				cr->stroke();
 
-			incVal += horizSpacing;
+				incVal += horizSpacing;
+				prevPoint = currPoint;
+			}
 		}
 	}
 	// Thingspeak field 8
-	incVal = gridHorizLeft;
-	for (int i = 0; i < (field8.size() - 1); ++i)
+	if (fieldEnable[7] == 1 && field8.size() > 1)
 	{
-		if (field8[i] != -1.0 && field8[i + 1] != -1.0)
+		cr->set_source_rgb(1.0, 0.5, 0.0);
+		incVal = gridHorizLeft;
+		double currPoint;
+		double prevPoint = gridVertBottom - ((field8[0] - xAxisOffset) * vertSpacing);
+
+		for (int i = 1; i < field8.size(); ++i)
 		{
-			valOne = gridVertBottom - ((field8[i] - xAxisOffset) * vertSpacing);
-			valTwo = gridVertBottom - ((field8[i + 1] - xAxisOffset) * vertSpacing);
+			if (field8[i] > 19) // values must be at least 20
+			{
+				currPoint = gridVertBottom - ((field8[i] - xAxisOffset) * vertSpacing);
 
-			cr->move_to(incVal, valOne);
-			cr->line_to((incVal + horizSpacing), valTwo);
-			cr->stroke();
+				cr->move_to(incVal, prevPoint);
+				cr->line_to((incVal + horizSpacing), currPoint);
+				cr->stroke();
 
-			incVal += horizSpacing;
+				incVal += horizSpacing;
+				prevPoint = currPoint;
+			}
 		}
 	}
-	*/
 }
 
 void MyArea::labelArea(const Cairo::RefPtr< Cairo::Context >& cr, double xPos, double yPos, Glib::ustring msgLbl)
@@ -282,6 +333,23 @@ void MyArea::labelArea(const Cairo::RefPtr< Cairo::Context >& cr, double xPos, d
 	layout->show_in_cairo_context(cr);
 }
 
+bool MyArea::toggleField(int fieldNum)
+{
+	if (fieldNum >= 0 && fieldNum < 8)
+	{
+		if (fieldEnable[fieldNum] == 0)
+			fieldEnable[fieldNum] = 1;
+		else
+			fieldEnable[fieldNum] = 0;
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void MyArea::setNumOfGridCols(double numOfCols)
 {
 	numCols = numOfCols;
@@ -291,6 +359,13 @@ void MyArea::setNumOfGridCols(double numOfCols)
 void MyArea::getFieldData(ThingSpeak tsObj)
 {
 	field1.clear();
+	field2.clear();
+	field3.clear();
+	field4.clear();
+	field5.clear();
+	field6.clear();
+	field7.clear();
+	field8.clear();
 
 	// Iterate through each item in ThingSpeak data bundle and store in local vectors
 	for (auto& mapItem : tsObj.getFieldResults())
@@ -300,7 +375,7 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			// ThingSpeak field 1
 			try
 			{
-				if (it->first == "field1") field1.push_back(std::stof(it->second));
+				if (fieldEnable[0] == 1 && it->first == "field1") field1.push_back(std::stof(it->second));
 			}
 			catch (const std::invalid_argument& ia)
 			{
@@ -310,7 +385,7 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			// ThingSpeak field 2
 			try
 			{
-				if (it->first == "field2") field2.push_back(std::stof(it->second));
+				if (fieldEnable[1] == 1 && it->first == "field2") field2.push_back(std::stof(it->second));
 			}
 			catch (const std::invalid_argument& ia)
 			{
@@ -320,7 +395,7 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			// ThingSpeak field 3
 			try
 			{
-				if (it->first == "field3") field3.push_back(std::stof(it->second));
+				if (fieldEnable[2] == 1 && it->first == "field3") field3.push_back(std::stof(it->second));
 			}
 			catch (const std::invalid_argument& ia)
 			{
@@ -330,7 +405,7 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			// ThingSpeak field 4
 			try
 			{
-				if (it->first == "field4") field4.push_back(std::stof(it->second));
+				if (fieldEnable[3] == 1 && it->first == "field4") field4.push_back(std::stof(it->second));
 			}
 			catch (const std::invalid_argument& ia)
 			{
@@ -340,7 +415,7 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			// ThingSpeak field 5
 			try 
 			{
-				if (it->first == "field5") field5.push_back(std::stof(it->second));
+				if (fieldEnable[4] == 1 && it->first == "field5") field5.push_back(std::stof(it->second));
 			}
 			catch (const std::invalid_argument& ia)
 			{
@@ -350,7 +425,7 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			// ThingSpeak field 6
 			try 
 			{
-				if (it->first == "field6") field6.push_back(std::stof(it->second));
+				if (fieldEnable[5] == 1 && it->first == "field6") field6.push_back(std::stof(it->second));
 			}
 			catch (const std::invalid_argument& ia)
 			{
@@ -360,7 +435,7 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			// ThingSpeak field 7
 			try 
 			{
-				if (it->first == "field7") field7.push_back(std::stof(it->second));
+				if (fieldEnable[6] == 1 && it->first == "field7") field7.push_back(std::stof(it->second));
 			}
 			catch (const std::invalid_argument& ia)
 			{
@@ -370,7 +445,7 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			// ThingSpeak field 8
 			try 
 			{
-				if (it->first == "field8") field8.push_back(std::stof(it->second));
+				if (fieldEnable[7] == 1 && it->first == "field8") field8.push_back(std::stof(it->second));
 			}
 			catch (const std::invalid_argument& ia)
 			{

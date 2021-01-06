@@ -14,11 +14,6 @@ ThingSpeak::ThingSpeak(char* url) : thingspeakUrl(url) {}
 
 ThingSpeak::~ThingSpeak() {}
 
-void ThingSpeak::setUrl(const char *url)
-{
-    thingspeakUrl = url;
-}
-
 void ThingSpeak::getChannelData()
 {
     // clear previous data before storing new set
@@ -96,6 +91,11 @@ void ThingSpeak::getChannelData()
     {
         std::cout << "Couldn't GET from " << thingspeakUrl << " - exiting" << std::endl;
     }
+}
+
+void ThingSpeak::printUrl()
+{
+    cout << "URL:\n   " << thingspeakUrl << endl;
 }
 
 void ThingSpeak::printData()

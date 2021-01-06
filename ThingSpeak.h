@@ -24,7 +24,7 @@ public:
 	~ThingSpeak();
 
 	// Functions
-	void setUrl(const char *url);
+	void printUrl();
 	void printData();
 	void getChannelData();
 	vector<map<string, string>> getFieldResults();

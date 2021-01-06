@@ -308,9 +308,10 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 				cr->line_to((incVal + horizSpacing), currPoint);
 				cr->stroke();
 
-				incVal += horizSpacing;
 				prevPoint = currPoint;
 			}
+
+			incVal += horizSpacing;
 		}
 	}
 }

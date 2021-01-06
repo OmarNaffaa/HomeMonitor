@@ -20,19 +20,22 @@ class ThingSpeak
 {
 public:
 	// Constructor and deconstructor
-	ThingSpeak(char* url);
+	ThingSpeak(char* tsChannel, char* tsKey, char* numRequests);
 	~ThingSpeak();
 
 	// Functions
-	void printUrl();
 	void printData();
 	void getChannelData();
 	vector<map<string, string>> getFieldResults();
 
 protected:
-	const char* thingspeakUrl;
+	char* thingspeakKey;
+	char* thingspeakChannel;
+	char* thingspeakNumRequests;
 	map<string, string> currResult;
 	vector<map<string, string>> fieldResults;
+
+	string buildUrl();
 };
 
 #endif // THINGSPEAK_H

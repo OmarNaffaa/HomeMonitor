@@ -10,7 +10,8 @@ namespace
     }
 }
 
-ThingSpeak::ThingSpeak(char* url) : thingspeakUrl(url) {}
+ThingSpeak::ThingSpeak(char* tsChannel, char* tsKey, char* tsRequests) : 
+    thingspeakChannel(tsChannel), thingspeakKey(tsKey), thingspeakNumRequests(tsRequests){}
 
 ThingSpeak::~ThingSpeak() {}
 
@@ -22,7 +23,8 @@ void ThingSpeak::getChannelData()
     CURL* curl = curl_easy_init();
 
     // Set remote URL.
-    curl_easy_setopt(curl, CURLOPT_URL, thingspeakUrl);
+    string thingspeakUrl = buildUrl();
+    curl_easy_setopt(curl, CURLOPT_URL, thingspeakUrl.c_str());
 
     // Don't bother trying IPv6, which would increase DNS resolution time.
     curl_easy_setopt(curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
@@ -93,11 +95,6 @@ void ThingSpeak::getChannelData()
     }
 }
 
-void ThingSpeak::printUrl()
-{
-    cout << "URL:\n   " << thingspeakUrl << endl;
-}
-
 void ThingSpeak::printData()
 {
     for (auto& myMap : fieldResults)
@@ -114,4 +111,16 @@ void ThingSpeak::printData()
 vector<map<string, string>> ThingSpeak::getFieldResults()
 {
     return fieldResults;
+}
+
+string ThingSpeak::buildUrl()
+{
+    string url = "https://api.thingspeak.com/channels/";
+    url += thingspeakChannel;
+    url += "/feeds.json?api_key=";
+    url += thingspeakKey;
+    url += "&results=";
+    url += thingspeakNumRequests;
+
+    return url;
 }

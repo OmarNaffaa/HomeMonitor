@@ -37,12 +37,14 @@ void asyncPolling(MyArea *dArea, int delayInMinutes);
 Glib::ustring setCss();
 
 /* 
-	Thingspeak URLs
+	Thingspeak polling object
 */
-char tsDayUrl[] = "https://api.thingspeak.com/channels/544573/feeds.json?api_key=BAY5Y9HPFP6V3C6G&results=24";
-char tsWeeklyUrl[] = "https://api.thingspeak.com/channels/544573/feeds.json?api_key=BAY5Y9HPFP6V3C6G&results=168";
+char tsChannel[] = "544573";
+char tsReadKey[] = "BAY5Y9HPFP6V3C6G";
+char tsNumOfRequests_Daily[] = "24";
+char tsNumOfRequests_Weekly[] = "168";
 
-ThingSpeak *tsPoller = new ThingSpeak(tsDayUrl);
+ThingSpeak *tsPoller = new ThingSpeak(tsChannel, tsReadKey, tsNumOfRequests_Daily);
 
 /*
 	!!! Main !!!
@@ -154,7 +156,7 @@ void onConfig1(MyArea* dArea)
 
 	// replace object with new poller
 	delete tsPoller;
-	tsPoller = new ThingSpeak(tsDayUrl);
+	tsPoller = new ThingSpeak(tsChannel, tsReadKey, tsNumOfRequests_Daily);
 
 	// update data
 	pollingMutex.lock();
@@ -173,7 +175,7 @@ void onConfig2(MyArea* dArea)
 
 	// replace object with new poller
 	delete tsPoller;
-	tsPoller = new ThingSpeak(tsWeeklyUrl);
+	tsPoller = new ThingSpeak(tsChannel, tsReadKey, tsNumOfRequests_Weekly);
 
 	// update data
 	pollingMutex.lock();

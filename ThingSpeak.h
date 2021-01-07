@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <exception>
 #include <map>
 #include <curl/curl.h>
 #include <json/json.h>
@@ -26,6 +27,7 @@ public:
 	// Functions
 	void printData();
 	void getChannelData();
+	string getMostRecentTemp(int fieldNum);
 	vector<map<string, string>> getFieldResults();
 
 protected:

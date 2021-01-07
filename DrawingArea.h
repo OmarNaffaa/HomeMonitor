@@ -28,8 +28,8 @@ public:
 protected:
 	double numRows;
 	double numCols;
-	int fieldEnable[8] = { 1, 0, 0, 0, 0, 0, 0, 0 }; // determines which fields should be plotted
-	vector<float> field1, field2, field3, field4, field5, field6, field7, field8;
+	int fieldEnable[2] = { 1, 0 }; // determines if fields should be plotted
+	vector<float> field1, field2;
 
 	// Override default signal handler:
 	bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;

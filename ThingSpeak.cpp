@@ -69,14 +69,8 @@ void ThingSpeak::getChannelData()
                 // iterate and store thingspeak values to field vector
                 currResult.insert(pair<string, string>("created_at", jsonValues[i][jsonValues[i].getMemberNames()[0]].asString()));
                 currResult.insert(pair<string, string>("entry_id", jsonValues[i][jsonValues[i].getMemberNames()[1]].asString()));
-                currResult.insert(pair<string, string>("field1", jsonValues[i][jsonValues[i].getMemberNames()[2]].asString()));
+                currResult.insert(pair<string, string>("field1", jsonValues[i][jsonValues[i].getMemberNames()[2]].asString())); 
                 currResult.insert(pair<string, string>("field2", jsonValues[i][jsonValues[i].getMemberNames()[3]].asString()));
-                currResult.insert(pair<string, string>("field3", jsonValues[i][jsonValues[i].getMemberNames()[4]].asString()));
-                currResult.insert(pair<string, string>("field4", jsonValues[i][jsonValues[i].getMemberNames()[5]].asString()));
-                currResult.insert(pair<string, string>("field5", jsonValues[i][jsonValues[i].getMemberNames()[6]].asString()));
-                currResult.insert(pair<string, string>("field6", jsonValues[i][jsonValues[i].getMemberNames()[7]].asString()));
-                currResult.insert(pair<string, string>("field7", jsonValues[i][jsonValues[i].getMemberNames()[8]].asString()));
-                currResult.insert(pair<string, string>("field8", jsonValues[i][jsonValues[i].getMemberNames()[9]].asString()));
 
                 fieldResults.push_back(currResult);
 
@@ -106,6 +100,38 @@ void ThingSpeak::printData()
 
         cout << endl;
     }
+}
+
+string ThingSpeak::getMostRecentTemp(int fieldNum)
+{
+    string mostRecentPoint;
+
+    if (fieldNum == 1)
+    {
+        for (auto& mapItem : fieldResults)
+        {
+            for (auto it = mapItem.cbegin(); it != mapItem.cend(); ++it)
+            {
+                if (it->first == "field1") mostRecentPoint = it->second;
+            }
+        }
+    }
+    else if (fieldNum == 2)
+    {
+        for (auto& mapItem : fieldResults)
+        {
+            for (auto it = mapItem.cbegin(); it != mapItem.cend(); ++it)
+            {
+                if (it->first == "field2") mostRecentPoint = it->second;
+            }
+        }
+    }
+    else
+    {
+        mostRecentPoint = "Invalid Field";
+    }
+
+    return mostRecentPoint;
 }
 
 vector<map<string, string>> ThingSpeak::getFieldResults()

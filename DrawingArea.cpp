@@ -105,14 +105,14 @@ void MyArea::drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int wid
 void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height)
 {
 	// determine graph constants
-	int amntOfPoints;
+	int amntOfPoints = 48;
 	const int tempRange = 100;
 	const float xAxisOffset = 20.0;
 
 	if ((numCols - 8.0) < 0.01)
-		amntOfPoints = 24;
-	if ((numCols - 9.0) < 0.01)
-		amntOfPoints = 168;
+		amntOfPoints = 48;
+	else if ((numCols - 9.0) < 0.01)
+		amntOfPoints = 336;
 
 	auto gridHorizLeft = width / numCols;
 	auto gridHorizRight = width - (width / numCols);
@@ -130,6 +130,7 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 		Plotting logic for graph
 	*/
 	// Thingspeak field 1
+
 	if (fieldEnable[0] == 1 && field1.size() > 1)
 	{
 		cr->set_source_rgb(1.0, 0.0, 0.0);
@@ -173,145 +174,6 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 				incVal += horizSpacing;
 				prevPoint = currPoint;
 			}
-		}
-	}
-	// Thingspeak field 3
-	if (fieldEnable[2] == 1 && field3.size() > 1)
-	{
-		cr->set_source_rgb(0.0, 0.0, 1.0);
-		incVal = gridHorizLeft;
-		double currPoint;
-		double prevPoint = gridVertBottom - ((field3[0] - xAxisOffset) * vertSpacing);
-
-		for (int i = 1; i < field3.size(); ++i)
-		{
-			if (field3[i] > 19) // values must be at least 20
-			{
-				currPoint = gridVertBottom - ((field3[i] - xAxisOffset) * vertSpacing);
-
-				cr->move_to(incVal, prevPoint);
-				cr->line_to((incVal + horizSpacing), currPoint);
-				cr->stroke();
-
-				incVal += horizSpacing;
-				prevPoint = currPoint;
-			}
-		}
-	}
-	// Thingspeak field 4
-	if (fieldEnable[3] == 1 && field4.size() > 1)
-	{
-		cr->set_source_rgb(1.0, 0.0, 1.0);
-		incVal = gridHorizLeft;
-		double currPoint;
-		double prevPoint = gridVertBottom - ((field4[0] - xAxisOffset) * vertSpacing);
-
-		for (int i = 1; i < field4.size(); ++i)
-		{
-			if (field4[i] > 19) // values must be at least 20
-			{
-				currPoint = gridVertBottom - ((field4[i] - xAxisOffset) * vertSpacing);
-
-				cr->move_to(incVal, prevPoint);
-				cr->line_to((incVal + horizSpacing), currPoint);
-				cr->stroke();
-
-				incVal += horizSpacing;
-				prevPoint = currPoint;
-			}
-		}
-	}
-	// Thingspeak field 5
-	if (fieldEnable[4] == 1 && field5.size() > 1)
-	{
-		cr->set_source_rgb(0.6, 0.2, 1.0);
-		incVal = gridHorizLeft;
-		double currPoint;
-		double prevPoint = gridVertBottom - ((field5[0] - xAxisOffset) * vertSpacing);
-
-		for (int i = 1; i < field5.size(); ++i)
-		{
-			if (field5[i] > 19) // values must be at least 20
-			{
-				currPoint = gridVertBottom - ((field5[i] - xAxisOffset) * vertSpacing);
-
-				cr->move_to(incVal, prevPoint);
-				cr->line_to((incVal + horizSpacing), currPoint);
-				cr->stroke();
-
-				incVal += horizSpacing;
-				prevPoint = currPoint;
-			}
-		}
-	}
-	// Thingspeak field 6
-	if (fieldEnable[5] == 1 && field6.size() > 1)
-	{
-		cr->set_source_rgb(0.6, 0.6, 0.0);
-		incVal = gridHorizLeft;
-		double currPoint;
-		double prevPoint = gridVertBottom - ((field6[0] - xAxisOffset) * vertSpacing);
-
-		for (int i = 1; i < field6.size(); ++i)
-		{
-			if (field6[i] > 19) // values must be at least 20
-			{
-				currPoint = gridVertBottom - ((field6[i] - xAxisOffset) * vertSpacing);
-
-				cr->move_to(incVal, prevPoint);
-				cr->line_to((incVal + horizSpacing), currPoint);
-				cr->stroke();
-
-				incVal += horizSpacing;
-				prevPoint = currPoint;
-			}
-		}
-	}
-	// Thingspeak field 7
-	if (fieldEnable[6] == 1 && field7.size() > 1)
-	{
-		cr->set_source_rgb(0.0, 0.6, 0.6);
-		incVal = gridHorizLeft;
-		double currPoint;
-		double prevPoint = gridVertBottom - ((field7[0] - xAxisOffset) * vertSpacing);
-
-		for (int i = 1; i < field7.size(); ++i)
-		{
-			if (field7[i] > 19) // values must be at least 20
-			{
-				currPoint = gridVertBottom - ((field7[i] - xAxisOffset) * vertSpacing);
-
-				cr->move_to(incVal, prevPoint);
-				cr->line_to((incVal + horizSpacing), currPoint);
-				cr->stroke();
-
-				incVal += horizSpacing;
-				prevPoint = currPoint;
-			}
-		}
-	}
-	// Thingspeak field 8
-	if (fieldEnable[7] == 1 && field8.size() > 1)
-	{
-		cr->set_source_rgb(1.0, 0.5, 0.0);
-		incVal = gridHorizLeft;
-		double currPoint;
-		double prevPoint = gridVertBottom - ((field8[0] - xAxisOffset) * vertSpacing);
-
-		for (int i = 1; i < field8.size(); ++i)
-		{
-			if (field8[i] > 19) // values must be at least 20
-			{
-				currPoint = gridVertBottom - ((field8[i] - xAxisOffset) * vertSpacing);
-
-				cr->move_to(incVal, prevPoint);
-				cr->line_to((incVal + horizSpacing), currPoint);
-				cr->stroke();
-
-				prevPoint = currPoint;
-			}
-
-			incVal += horizSpacing;
 		}
 	}
 }
@@ -361,12 +223,6 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 {
 	field1.clear();
 	field2.clear();
-	field3.clear();
-	field4.clear();
-	field5.clear();
-	field6.clear();
-	field7.clear();
-	field8.clear();
 
 	// Iterate through each item in ThingSpeak data bundle and store in local vectors
 	for (auto& mapItem : tsObj.getFieldResults())
@@ -392,66 +248,6 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			{
 				field2.push_back(-1.0);
 				std::cout << "Field 2 - Invalid Argument: " << ia.what() << '\n';
-			}
-			// ThingSpeak field 3
-			try
-			{
-				if (fieldEnable[2] == 1 && it->first == "field3") field3.push_back(std::stof(it->second));
-			}
-			catch (const std::invalid_argument& ia)
-			{
-				field3.push_back(-1.0);
-				std::cout << "Field 3 - Invalid Argument: " << ia.what() << '\n';
-			}
-			// ThingSpeak field 4
-			try
-			{
-				if (fieldEnable[3] == 1 && it->first == "field4") field4.push_back(std::stof(it->second));
-			}
-			catch (const std::invalid_argument& ia)
-			{
-				field4.push_back(-1.0);
-				std::cout << "Field 4 - Invalid Argument: " << ia.what() << '\n';
-			}
-			// ThingSpeak field 5
-			try 
-			{
-				if (fieldEnable[4] == 1 && it->first == "field5") field5.push_back(std::stof(it->second));
-			}
-			catch (const std::invalid_argument& ia)
-			{
-				field5.push_back(-1.0);
-				std::cout << "Field 5 - Invalid Argument: " << ia.what() << '\n';
-			}
-			// ThingSpeak field 6
-			try 
-			{
-				if (fieldEnable[5] == 1 && it->first == "field6") field6.push_back(std::stof(it->second));
-			}
-			catch (const std::invalid_argument& ia)
-			{
-				field6.push_back(-1.0);
-				std::cout << "Field 6 - Invalid Argument: " << ia.what() << '\n';
-			}
-			// ThingSpeak field 7
-			try 
-			{
-				if (fieldEnable[6] == 1 && it->first == "field7") field7.push_back(std::stof(it->second));
-			}
-			catch (const std::invalid_argument& ia)
-			{
-				field7.push_back(-1.0);
-				std::cout << "Field 7 - Invalid Argument: " << ia.what() << '\n';
-			}
-			// ThingSpeak field 8
-			try 
-			{
-				if (fieldEnable[7] == 1 && it->first == "field8") field8.push_back(std::stof(it->second));
-			}
-			catch (const std::invalid_argument& ia)
-			{
-				field8.push_back(-1.0);
-				std::cout << "Field 8 - Invalid Argument: " << ia.what() << '\n';
 			}
 		}
 	}

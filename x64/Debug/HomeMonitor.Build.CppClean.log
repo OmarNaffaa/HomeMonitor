@@ -1,9 +1,9 @@
 d:\6_personalprojects\homemonitor\x64\debug\vc142.pdb
 d:\6_personalprojects\homemonitor\x64\debug\vc142.idb
+d:\6_personalprojects\homemonitor\x64\debug\thingspeak.obj
 d:\6_personalprojects\homemonitor\x64\debug\mainwindow.obj
-d:\6_personalprojects\homemonitor\x64\debug\drawingarea.obj
-d:\6_personalprojects\homemonitor\x64\debug\buttonrow.obj
 d:\6_personalprojects\homemonitor\x64\debug\main.obj
+d:\6_personalprojects\homemonitor\x64\debug\drawingarea.obj
 d:\6_personalprojects\homemonitor\x64\debug\atkmm.dll
 d:\6_personalprojects\homemonitor\x64\debug\atk-1.dll
 d:\6_personalprojects\homemonitor\x64\debug\intl-8.dll
@@ -39,6 +39,8 @@ d:\6_personalprojects\homemonitor\x64\debug\giomm.dll
 d:\6_personalprojects\homemonitor\x64\debug\gtk-3.dll
 d:\6_personalprojects\homemonitor\x64\debug\gtkmm.dll
 d:\6_personalprojects\homemonitor\x64\debug\pangomm.dll
+d:\6_personalprojects\homemonitor\x64\debug\jsoncpp.dll
+d:\6_personalprojects\homemonitor\x64\debug\libcurl-d.dll
 d:\6_personalprojects\homemonitor\x64\debug\homemonitor.exe
 d:\6_personalprojects\homemonitor\x64\debug\homemonitor.ilk
 d:\6_personalprojects\homemonitor\x64\debug\homemonitor.pdb

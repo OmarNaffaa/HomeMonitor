@@ -4,30 +4,28 @@
 
 #include <gtkmm/Application.h>
 #include <gtkmm/button.h>
+#include <gtkmm/label.h>
+#include <gtkmm/entry.h>
 #include <gtkmm/box.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/menu.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/menuitem.h>
+#include <gtkmm/messagedialog.h>
 #include <glibmm/dispatcher.h>
 
 #include "MainWindow.h"
 #include "DrawingArea.h"
 #include "ThingSpeak.h"
 
-// Widget Definition Function Prototypes
-void configButtons(Gtk::Button (&layoutBtn)[7], MyArea* dArea);
-
 // Signal Handlers
 void onConfig1(MyArea* dArea); // 24 hrs
 void onConfig2(MyArea* dArea); // 7 days
 void onBtn0(MyArea* dArea);
 void onBtn1(MyArea* dArea);
-void onBtn2(MyArea* dArea);
-void onBtn3(MyArea* dArea);
-void onBtn4(MyArea* dArea);
-void onBtn5(MyArea* dArea);
-void onBtn6(MyArea* dArea);
+void onBtn2(MainWindow* window);
+void onBtn3(Gtk::Entry* entryBox);
+void onBtn4(Gtk::Entry* entryBox);
 
 // Threading Functions
 std::mutex pollingMutex;
@@ -37,14 +35,17 @@ void asyncPolling(MyArea *dArea, int delayInMinutes);
 Glib::ustring setCss();
 
 /* 
-	Thingspeak polling object
+	Thingspeak Channel Information
 */
-char tsChannel[] = "544573";
-char tsReadKey[] = "BAY5Y9HPFP6V3C6G";
-char tsNumOfRequests_Daily[] = "24";
-char tsNumOfRequests_Weekly[] = "168";
+char tsChannel[] = "1277292";
+char tsReadKey[] = "I4BV5Q70NNDWH0SP";
+char tsNumOfRequests_Daily[] = "48";
+char tsNumOfRequests_Weekly[] = "336";
 
-ThingSpeak *tsPoller = new ThingSpeak(tsChannel, tsReadKey, tsNumOfRequests_Daily);
+/*
+	Global Variables
+*/
+auto tsPoller = new ThingSpeak(tsChannel, tsReadKey, tsNumOfRequests_Daily);
 
 /*
 	!!! Main !!!
@@ -54,28 +55,59 @@ int main(int argc, char* argv[])
 	auto app = Gtk::Application::create(argc, argv);
 
 	auto mainContainer = Gtk::Box();
-	MainWindow homepage("Dashboard");
+	MainWindow* homepage = new MainWindow("Dashboard");
 
 	// Create drawing area and add to container
 	MyArea mArea(12.0, 8.0);
 	mainContainer.pack_start(mArea, Gtk::PACK_EXPAND_WIDGET);
 
+	// Create labels and entry boxes for main window
+	Gtk::Label toggleLbl("Click to toggle display");
+	toggleLbl.set_name("topColItem");
+	Gtk::Label infoLbl("Additional Info");
+	infoLbl.set_name("columnLbl");
+	Gtk::Label modifyTsKeyAndChannel("Modify Channel or Key");
+	modifyTsKeyAndChannel.set_name("columnLbl");
+
+	Gtk::Entry* tsChannelEntry = new Gtk::Entry();
+	tsChannelEntry->set_placeholder_text("Channel Number");
+	tsChannelEntry->set_name("entryBox");
+	Gtk::Entry* tsKeyEntry = new Gtk::Entry();
+	tsKeyEntry->set_placeholder_text("Read Key");
+	tsKeyEntry->set_name("entryBox");
+
 	// Create buttons and group them in a container
-	auto btnRowBox = Gtk::VBox();
-	btnRowBox.set_name("btnRowBox");
+	auto mainWindowColumn = Gtk::VBox();
+	Gtk::Button btn[5];
 
-	Gtk::Button btn[7];
-	configButtons(btn, &mArea);
+	mainWindowColumn.set_name("btnRowBox");
+	for (auto& btnItem : btn)
+		btnItem.set_name("optionBtns");
 
-	btnRowBox.pack_start(btn[0], Gtk::PACK_EXPAND_WIDGET, 0);
-	btnRowBox.pack_start(btn[1], Gtk::PACK_EXPAND_WIDGET, 0);
-	btnRowBox.pack_start(btn[2], Gtk::PACK_EXPAND_WIDGET, 0);
-	btnRowBox.pack_start(btn[3], Gtk::PACK_EXPAND_WIDGET, 0);
-	btnRowBox.pack_start(btn[4], Gtk::PACK_EXPAND_WIDGET, 0);
-	btnRowBox.pack_start(btn[5], Gtk::PACK_EXPAND_WIDGET, 0);
-	btnRowBox.pack_start(btn[6], Gtk::PACK_EXPAND_WIDGET, 0);
+	btn[0].add_label("My Bedroom");
+	btn[0].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn0), &mArea));
+	btn[1].add_label("Downstairs Bedroom");
+	btn[1].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn1), &mArea));
+	btn[2].add_label("Information");
+	btn[2].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn2), homepage));
+	btn[3].add_label("Set Channel");
+	btn[3].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn3), tsChannelEntry));
+	btn[4].add_label("Set Key");
+	btn[4].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn4), tsKeyEntry));
 
-	mainContainer.add(btnRowBox);
+	// Pack column widgets into main column container
+	mainWindowColumn.pack_start(toggleLbl, Gtk::PACK_EXPAND_WIDGET, 0);
+	mainWindowColumn.pack_start(btn[0], Gtk::PACK_EXPAND_WIDGET, 0);
+	mainWindowColumn.pack_start(btn[1], Gtk::PACK_EXPAND_WIDGET, 0);
+	mainWindowColumn.pack_start(infoLbl, Gtk::PACK_EXPAND_WIDGET, 0);
+	mainWindowColumn.pack_start(btn[2], Gtk::PACK_EXPAND_WIDGET, 0);
+	mainWindowColumn.pack_start(modifyTsKeyAndChannel, Gtk::PACK_EXPAND_WIDGET, 0);
+	mainWindowColumn.pack_start(*tsChannelEntry, Gtk::PACK_EXPAND_WIDGET, 0);
+	mainWindowColumn.pack_start(btn[3], Gtk::PACK_EXPAND_WIDGET, 0);
+	mainWindowColumn.pack_start(*tsKeyEntry, Gtk::PACK_EXPAND_WIDGET, 0);
+	mainWindowColumn.pack_start(btn[4], Gtk::PACK_EXPAND_WIDGET, 0);
+
+	mainContainer.add(mainWindowColumn);
 
 	// Create menubar
 	Gtk::MenuBar menuBar;
@@ -105,7 +137,7 @@ int main(int argc, char* argv[])
 	windowScroller.add(windowContainer);
 
 	// Create thread to poll ThingSpeak asynchronously
-	asyncPolling(&mArea, 10);
+	asyncPolling(&mArea, 1);
 
 	// Load color settings from CSS file
 	auto cssProvider = Gtk::CssProvider::create();
@@ -115,35 +147,10 @@ int main(int argc, char* argv[])
 	styleContext->add_provider_for_screen(screen, cssProvider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
 	// Add main container to window
-	homepage.add(windowScroller);
-	homepage.show_all();
+	homepage->add(windowScroller);
+	homepage->show_all();
 
-	return app->run(homepage);
-}
-
-/*
-	Widget Configuration Function Definitions
-*/
-void configButtons(Gtk::Button(&layoutBtn)[7], MyArea* dArea)
-{
-	for (int i = 0; i < 7; ++i)
-		layoutBtn[i].set_name("optionBtns");
-
-	layoutBtn[0].add_label("My Bedroom");
-	layoutBtn[1].add_label("Upstairs Bedroom");
-	layoutBtn[2].add_label("Downstairs Bedroom");
-	layoutBtn[3].add_label("Master Bedroom");
-	layoutBtn[4].add_label("Living Room");
-	layoutBtn[5].add_label("Family Room");
-	layoutBtn[6].add_label("Kitchen");
-
-	layoutBtn[0].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn0), dArea));
-	layoutBtn[1].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn1), dArea));
-	layoutBtn[2].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn2), dArea));
-	layoutBtn[3].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn3), dArea));
-	layoutBtn[4].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn4), dArea));
-	layoutBtn[5].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn5), dArea));
-	layoutBtn[6].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn6), dArea));
+	return app->run(*homepage);
 }
 
 /*
@@ -217,79 +224,43 @@ void onBtn1(MyArea* dArea)
 	pollingMutex.unlock();
 }
 
-void onBtn2(MyArea* dArea)
+void onBtn2(MainWindow* window)
 {
-	// toggle thingspeak field 3
-	dArea->toggleField(2);
+	// Get most recent temperature data;
+	string dialogText;
+	string temp1 = tsPoller->getMostRecentTemp(1);
+	string temp2 = tsPoller->getMostRecentTemp(2);
 
-	// update chart
-	pollingMutex.lock();
+	dialogText += " \nMost Recent Bedroom Temperature: ";
+	if (temp1 != "Invalid Field" && temp1 != "")
+		dialogText += temp1 + " degrees fahrenheit\n";
+	else
+		dialogText += "No Data Found\n";
 
-	tsPoller->getChannelData();
-	dArea->getFieldData(*tsPoller);
-	dArea->queue_draw();
+	dialogText += " \nMost Recent Downstairs Temperature: ";
+	if (temp2 != "Invalid Field" && temp2 != "")
+		dialogText += temp2 + " degrees fahrenheit";
+	else
+		dialogText += "No Data Found\n";
 
-	pollingMutex.unlock();
+	// Display dialog with additional information
+	std::unique_ptr<Gtk::MessageDialog> dialog;
+	dialog.reset(new Gtk::MessageDialog(*window, "Additional Temperature Information"));
+
+	dialog->set_name("dialogWindow");
+	dialog->set_default_size(600, 300);
+	dialog->set_secondary_text(dialogText);
+	dialog->run();
 }
 
-void onBtn3(MyArea* dArea)
+void onBtn3(Gtk::Entry* entryBox)
 {
-	// toggle thingspeak field 4
-	dArea->toggleField(3);
-
-	// update chart
-	pollingMutex.lock();
-
-	tsPoller->getChannelData();
-	dArea->getFieldData(*tsPoller);
-	dArea->queue_draw();
-
-	pollingMutex.unlock();
+	// Update ThingSpeak channel number - TODO
 }
 
-void onBtn4(MyArea* dArea)
+void onBtn4(Gtk::Entry* entryBox)
 {
-	// toggle thingspeak field 5
-	dArea->toggleField(4);
-
-	// update chart
-	pollingMutex.lock();
-
-	tsPoller->getChannelData();
-	dArea->getFieldData(*tsPoller);
-	dArea->queue_draw();
-
-	pollingMutex.unlock();
-}
-
-void onBtn5(MyArea* dArea)
-{
-	// toggle thingspeak field 6
-	dArea->toggleField(5);
-
-	// update chart
-	pollingMutex.lock();
-
-	tsPoller->getChannelData();
-	dArea->getFieldData(*tsPoller);
-	dArea->queue_draw();
-
-	pollingMutex.unlock();
-}
-
-void onBtn6(MyArea* dArea)
-{
-	// toggle thingspeak field 7
-	dArea->toggleField(6);
-
-	// update chart
-	pollingMutex.lock();
-
-	tsPoller->getChannelData();
-	dArea->getFieldData(*tsPoller);
-	dArea->queue_draw();
-
-	pollingMutex.unlock();
+	// Update ThingSpeak read key - TODO
 }
 
 void asyncPolling(MyArea* dArea, int delayInMinutes)
@@ -326,10 +297,18 @@ Glib::ustring setCss()
 	retVal += "button.titlebutton.minimize:hover{background:#BFBFBF;} ";
 	retVal += "button.titlebutton.close:hover{background:#C90000;} ";
 
+	// labels and entries
+	retVal += "#topColItem{color:black;font-family:sans-serif;font-size:20px;margin-bottom:10px;padding:5px;}";
+	retVal += "#columnLbl{color:black;font-family:sans-serif;font-size:20px;margin-top:50px;margin-bottom:10px;padding:5px;}";
+	retVal += "#entryBox{color:black;font-family:sans-serif;font-size:20px;margin:5px;padding:5px;}";
+
 	// option buttons
 	retVal += "button label{color:white;font-family:sans-serif;font-size:20px;} ";
-	retVal += "#optionBtns{border-radius:12px;background:#000069;margin:10px;padding:5px;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5),0 6px 20px 0 rgba(0,0,0,0.5);} ";
+	retVal += "#optionBtns{border-radius:12px;background:#000069;margin:5px;padding-left:5px;padding-right:5px;padding-top:20px;padding-bottom:20px;} ";
 	retVal += "#optionBtns:hover{background:#3D3DAF;} ";
+
+	// dialogs
+	retVal += "#dialogWindow label{color:black;font-family:sans-serif;font-size:20px;}";
 
 	// Miscellaneous widget items
 	retVal += "#btnRowBox{background-color:#E5E5E5;} ";

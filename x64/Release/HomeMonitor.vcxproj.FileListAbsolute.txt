@@ -35,3 +35,5 @@ D:\6_PersonalProjects\HomeMonitor\x64\Release\giomm.dll
 D:\6_PersonalProjects\HomeMonitor\x64\Release\gtk-3.dll
 D:\6_PersonalProjects\HomeMonitor\x64\Release\gtkmm.dll
 D:\6_PersonalProjects\HomeMonitor\x64\Release\pangomm.dll
+D:\6_PersonalProjects\HomeMonitor\x64\Release\jsoncpp.dll
+D:\6_PersonalProjects\HomeMonitor\x64\Release\libcurl.dll

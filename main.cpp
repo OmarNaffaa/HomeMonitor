@@ -96,16 +96,16 @@ int main(int argc, char* argv[])
 	btn[4].signal_clicked().connect(sigc::bind(sigc::ptr_fun(&onBtn4), tsKeyEntry));
 
 	// Pack column widgets into main column container
-	mainWindowColumn.pack_start(toggleLbl, Gtk::PACK_EXPAND_WIDGET, 0);
-	mainWindowColumn.pack_start(btn[0], Gtk::PACK_EXPAND_WIDGET, 0);
-	mainWindowColumn.pack_start(btn[1], Gtk::PACK_EXPAND_WIDGET, 0);
-	mainWindowColumn.pack_start(infoLbl, Gtk::PACK_EXPAND_WIDGET, 0);
-	mainWindowColumn.pack_start(btn[2], Gtk::PACK_EXPAND_WIDGET, 0);
-	mainWindowColumn.pack_start(modifyTsKeyAndChannel, Gtk::PACK_EXPAND_WIDGET, 0);
-	mainWindowColumn.pack_start(*tsChannelEntry, Gtk::PACK_EXPAND_WIDGET, 0);
-	mainWindowColumn.pack_start(btn[3], Gtk::PACK_EXPAND_WIDGET, 0);
-	mainWindowColumn.pack_start(*tsKeyEntry, Gtk::PACK_EXPAND_WIDGET, 0);
-	mainWindowColumn.pack_start(btn[4], Gtk::PACK_EXPAND_WIDGET, 0);
+	mainWindowColumn.pack_start(toggleLbl, Gtk::PACK_SHRINK, 0);
+	mainWindowColumn.pack_start(btn[0], Gtk::PACK_SHRINK, 0);
+	mainWindowColumn.pack_start(btn[1], Gtk::PACK_SHRINK, 0);
+	mainWindowColumn.pack_start(modifyTsKeyAndChannel, Gtk::PACK_SHRINK, 0);
+	mainWindowColumn.pack_start(*tsChannelEntry, Gtk::PACK_SHRINK, 0);
+	mainWindowColumn.pack_start(btn[3], Gtk::PACK_SHRINK, 0);
+	mainWindowColumn.pack_start(*tsKeyEntry, Gtk::PACK_SHRINK, 0);
+	mainWindowColumn.pack_start(btn[4], Gtk::PACK_SHRINK, 0);
+	mainWindowColumn.pack_end(btn[2], Gtk::PACK_SHRINK, 0);
+	mainWindowColumn.pack_end(infoLbl, Gtk::PACK_SHRINK, 0);
 
 	mainContainer.add(mainWindowColumn);
 

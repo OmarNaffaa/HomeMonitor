@@ -38,3 +38,4 @@ D:\6_PersonalProjects\HomeMonitor\x64\Debug\gtkmm.dll
 D:\6_PersonalProjects\HomeMonitor\x64\Debug\pangomm.dll
 D:\6_PersonalProjects\HomeMonitor\x64\Debug\jsoncpp.dll
 D:\6_PersonalProjects\HomeMonitor\x64\Debug\libcurl-d.dll
+D:\6_PersonalProjects\HomeMonitor\x64\Debug\fmtd.dll

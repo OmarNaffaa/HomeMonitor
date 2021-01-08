@@ -1,6 +1,7 @@
 #ifndef MYAREA_H
 #define MYAREA_H
 
+#include <fmt/core.h>
 #include <vector>
 #include <map>
 #include <string>
@@ -26,8 +27,10 @@ public:
 	bool toggleField(int fieldNum);
 
 protected:
-	double numRows;
-	double numCols;
+	const int dailyPoints = 48;
+	const int weeklyPoints = 336;
+	double numRows, numCols;
+	float highestTemp, lowestTemp;
 	int fieldEnable[2] = { 1, 0 }; // determines if fields should be plotted
 	vector<float> field1, field2;
 
@@ -39,6 +42,7 @@ protected:
 	void drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height);
 	void plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height);
 	void labelArea(const Cairo::RefPtr< Cairo::Context >& cr, double xPos, double yPos, Glib::ustring msgLbl);
+	void getTempRange();
 };
 
 #endif // MYAREA_H

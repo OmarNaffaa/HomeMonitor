@@ -2,10 +2,10 @@
 #include <iostream>
 using std::cout; using std::endl;
 
-MyArea::MyArea() : numRows(12.0), numCols(8.0) {}
+MyArea::MyArea() : numRows(12.0), numCols(8.0), highestTemp(0), lowestTemp(200) {}
 
 MyArea::MyArea(double numOfRows, double numOfCols) :
-	numRows(numOfRows), numCols(numOfCols) {}
+	numRows(numOfRows), numCols(numOfCols), highestTemp(0), lowestTemp(200) {}
 
 MyArea::~MyArea() {}
 
@@ -46,7 +46,7 @@ void MyArea::drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int wid
 	auto gridRowNum = height / numRows;
 
 	cr->set_line_width(1.0);
-	cr->set_source_rgb(0.75, 0.75, 0.75);
+	cr->set_source_rgb(0.8, 0.8, 0.8);
 
 	// draw grid columns
 	for (int i = 0; i < (numCols - 1); ++i)
@@ -81,38 +81,48 @@ void MyArea::drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int wid
 
 	cr->stroke();
 
-	// label grid rows and columns
-	Glib::ustring graphRowIncrement[] = { "30", "40", "50", "60", "70", "80", "90", "100", "110", "120" };
-	
+	// label grid rows and columns	
 	Glib::ustring graphColIncrement;
 	if (numCols == 8.0) graphColIncrement = "Past 24 Hours";
 	if (numCols == 9.0) graphColIncrement = "Past Week";
 
 	const double vertColOffset = 15.0;
-	const double vertRowOffset = 10.0;
-	const double horizOffset = 60.0;
+	const double vertRowOffset = -15.0;
+	const double horizOffset = 65.0;
 
-	labelArea(cr, (width/2 - horizOffset), (height - gridRowNum + vertColOffset), graphColIncrement); // x-axis label
+	// label columns (x-axis)
+	labelArea(cr, (width/2 - horizOffset), (height - gridRowNum + vertColOffset), graphColIncrement);
 
-	for (int i = (numRows - 3); i >= 0; --i) // rows
+	// label rows (y-axis)
+	getTempRange();
+	auto currTemp = highestTemp;
+	float tempIncrement = (highestTemp - lowestTemp) / numRows;
+
+	if (highestTemp != 0 || lowestTemp != 200)
 	{
-		labelArea(cr, (gridColNum - horizOffset), (gridRowNum + vertRowOffset), (graphRowIncrement[i] + " F"));
+		for (int i = (numRows - 2); i >= 0; --i)
+		{
+			labelArea(cr, (gridColNum - horizOffset), (gridRowNum + vertRowOffset), (fmt::format("{:.1f}", currTemp) + " F"));
 
-		gridRowNum += (height / numRows);
+			gridRowNum += (height / numRows);
+			currTemp -= tempIncrement;
+		}
 	}
 }
 
 void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height)
 {
 	// determine graph constants
-	int amntOfPoints = 48;
-	const int tempRange = 100;
-	const float xAxisOffset = 20.0;
+	int amntOfPoints = dailyPoints;
+
+	getTempRange();
+	int tempRange = highestTemp - lowestTemp;
+	float xAxisOffset = lowestTemp;
 
 	if ((numCols - 8.0) < 0.01)
-		amntOfPoints = 48;
+		amntOfPoints = dailyPoints;
 	else if ((numCols - 9.0) < 0.01)
-		amntOfPoints = 336;
+		amntOfPoints = weeklyPoints;
 
 	auto gridHorizLeft = width / numCols;
 	auto gridHorizRight = width - (width / numCols);
@@ -232,7 +242,8 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			// ThingSpeak field 1
 			try
 			{
-				if (fieldEnable[0] == 1 && it->first == "field1") field1.push_back(std::stof(it->second));
+				if (fieldEnable[0] == 1 && it->first == "field1")
+					field1.push_back(std::stof(it->second));
 			}
 			catch (const std::invalid_argument& ia)
 			{
@@ -242,7 +253,8 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			// ThingSpeak field 2
 			try
 			{
-				if (fieldEnable[1] == 1 && it->first == "field2") field2.push_back(std::stof(it->second));
+				if (fieldEnable[1] == 1 && it->first == "field2")
+					field2.push_back(std::stof(it->second));
 			}
 			catch (const std::invalid_argument& ia)
 			{
@@ -250,6 +262,26 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 				std::cout << "Field 2 - Invalid Argument: " << ia.what() << '\n';
 			}
 		}
+	}
+}
+
+void MyArea::getTempRange()
+{
+	highestTemp = 0;
+	lowestTemp = 200;
+
+	// search first vector for temperature extremes
+	for (auto& tempPoint : field1)
+	{
+		if (tempPoint > highestTemp) highestTemp = tempPoint;
+		if (tempPoint < lowestTemp) lowestTemp = tempPoint;
+	}
+
+	// search second vector for temperature extremes
+	for (auto& tempPoint : field2)
+	{
+		if (tempPoint > highestTemp) highestTemp = tempPoint;
+		if (tempPoint < lowestTemp) lowestTemp = tempPoint;
 	}
 }
 
@@ -271,5 +303,6 @@ void MyArea::listAvailableFonts()
 		family_name = pango_font_family_get_name(family);
 		printf("Family %d: %s\n", i, family_name);
 	}
+
 	g_free(families);
 }

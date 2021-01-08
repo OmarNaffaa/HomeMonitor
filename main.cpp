@@ -37,15 +37,16 @@ Glib::ustring setCss();
 /* 
 	Thingspeak Channel Information
 */
-char tsChannel[] = "1277292";
-char tsReadKey[] = "I4BV5Q70NNDWH0SP";
-char tsNumOfRequests_Daily[] = "48";
-char tsNumOfRequests_Weekly[] = "336";
+string tsChannel = "1277292";
+string tsReadKey = "I4BV5Q70NNDWH0SP";
+string tsNumOfRequests_Daily = "48";
+string tsNumOfRequests_Weekly = "336";
 
 /*
 	Global Variables
 */
 auto tsPoller = new ThingSpeak(tsChannel, tsReadKey, tsNumOfRequests_Daily);
+MyArea* dArea_ref; // used in "onBtn3" and "onBtn4" functions
 
 /*
 	!!! Main !!!
@@ -59,6 +60,7 @@ int main(int argc, char* argv[])
 
 	// Create drawing area and add to container
 	MyArea mArea(12.0, 8.0);
+	dArea_ref = &mArea;
 	mainContainer.pack_start(mArea, Gtk::PACK_EXPAND_WIDGET);
 
 	// Create labels and entry boxes for main window
@@ -228,20 +230,29 @@ void onBtn2(MainWindow* window)
 {
 	// Get most recent temperature data;
 	string dialogText;
+	string timestamp = tsPoller->getMostRecentTimestamp();
 	string temp1 = tsPoller->getMostRecentTemp(1);
 	string temp2 = tsPoller->getMostRecentTemp(2);
 
-	dialogText += " \nMost Recent Bedroom Temperature: ";
 	if (temp1 != "Invalid Field" && temp1 != "")
+	{
+		dialogText += " \nMost Recent Bedroom Temperature: ";
 		dialogText += temp1 + " degrees fahrenheit\n";
-	else
-		dialogText += "No Data Found\n";
+	}
 
-	dialogText += " \nMost Recent Downstairs Temperature: ";
 	if (temp2 != "Invalid Field" && temp2 != "")
-		dialogText += temp2 + " degrees fahrenheit";
-	else
-		dialogText += "No Data Found\n";
+	{
+		dialogText += " \nMost Recent Downstairs Temperature: ";
+		dialogText += temp2 + " degrees fahrenheit\n";
+	}
+
+	if (timestamp != "")
+	{
+		dialogText += " \nTime of Last Update (Relative to server): ";
+		dialogText += timestamp.substr(timestamp.find_first_of('T')+1, 8);
+		dialogText += " \nDate of Last Update (Relative to server): ";
+		dialogText += timestamp.substr(0, timestamp.find_first_of('T'));
+	}
 
 	// Display dialog with additional information
 	std::unique_ptr<Gtk::MessageDialog> dialog;
@@ -255,12 +266,55 @@ void onBtn2(MainWindow* window)
 
 void onBtn3(Gtk::Entry* entryBox)
 {
-	// Update ThingSpeak channel number - TODO
+	// Update ThingSpeak channel number
+	auto entryTxt = entryBox->get_text();
+
+	if (entryTxt != "")
+	{
+		tsChannel = entryTxt;
+
+		// replace object with new poller
+		delete tsPoller;
+		tsPoller = new ThingSpeak(tsChannel, tsReadKey, tsNumOfRequests_Daily);
+
+		// update data
+		pollingMutex.lock();
+
+		tsPoller->getChannelData();
+		dArea_ref->getFieldData(*tsPoller);
+		dArea_ref->queue_draw();
+
+		pollingMutex.unlock();
+
+		entryBox->set_text("");
+	}
 }
 
 void onBtn4(Gtk::Entry* entryBox)
 {
 	// Update ThingSpeak read key - TODO
+	string entryTxt = entryBox->get_text();
+
+	if (entryTxt != "")
+	{
+		tsReadKey = entryTxt;
+
+		// replace object with new poller
+		delete tsPoller;
+		tsPoller = new ThingSpeak(tsChannel, tsReadKey, tsNumOfRequests_Daily);
+
+		// update data
+		pollingMutex.lock();
+
+		tsPoller->getChannelData();
+		dArea_ref->getFieldData(*tsPoller);
+		dArea_ref->queue_draw();
+
+		pollingMutex.unlock();
+
+		// clear dialog
+		entryBox->set_text("");
+	}
 }
 
 void asyncPolling(MyArea* dArea, int delayInMinutes)

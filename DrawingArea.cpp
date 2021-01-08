@@ -98,7 +98,7 @@ void MyArea::drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int wid
 	auto currTemp = highestTemp;
 	float tempIncrement = (highestTemp - lowestTemp) / numRows;
 
-	if (highestTemp != 0 || lowestTemp != 200)
+	if (highestTemp != 0 || lowestTemp != 200 || highestTemp == lowestTemp)
 	{
 		for (int i = (numRows - 2); i >= 0; --i)
 		{
@@ -143,11 +143,11 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 
 	if (fieldEnable[0] == 1 && field1.size() > 1)
 	{
-		cr->set_source_rgb(1.0, 0.0, 0.0);
 		incVal = gridHorizLeft;
 		double currPoint;
 		double prevPoint = gridVertBottom - ((field1[0] - xAxisOffset) * vertSpacing);
 
+		cr->set_source_rgb(0.8, 0.0, 0.0);
 		for (int i = 1; i < field1.size(); ++i)
 		{
 			if (field1[i] > 19) // values must be at least 20
@@ -155,6 +155,9 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 				currPoint = gridVertBottom - ((field1[i] - xAxisOffset) * vertSpacing);
 
 				cr->move_to(incVal, prevPoint);
+				cr->arc(incVal, prevPoint, 4.0, 0.0, 2*M_PI);
+				cr->close_path();
+				cr->fill_preserve();
 				cr->line_to((incVal + horizSpacing), currPoint);
 				cr->stroke();
 
@@ -162,22 +165,29 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 				prevPoint = currPoint;
 			}
 		}
+
+		cr->arc(incVal, prevPoint, 5.0, 0.0, 2 * M_PI);
+		cr->close_path();
+		cr->fill_preserve();
 	}
 	// Thingspeak field 2
 	if (fieldEnable[1] == 1 && field2.size() > 1)
 	{
-		cr->set_source_rgb(0.0, 0.8, 0.0);
 		incVal = gridHorizLeft;
 		double currPoint;
 		double prevPoint = gridVertBottom - ((field2[0] - xAxisOffset) * vertSpacing);
 
-		for (int i = 1; i < field2.size(); ++i)
+		cr->set_source_rgb(0.8, 0.0, 0.0);
+		for (int i = 1; i < field1.size(); ++i)
 		{
-			if (field2[i] > 19) // values must be at least 20
+			if (field1[i] > 19) // values must be at least 20
 			{
 				currPoint = gridVertBottom - ((field2[i] - xAxisOffset) * vertSpacing);
 
 				cr->move_to(incVal, prevPoint);
+				cr->arc(incVal, prevPoint, 4.0, 0.0, 2 * M_PI);
+				cr->close_path();
+				cr->fill_preserve();
 				cr->line_to((incVal + horizSpacing), currPoint);
 				cr->stroke();
 
@@ -185,6 +195,10 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 				prevPoint = currPoint;
 			}
 		}
+
+		cr->arc(incVal, prevPoint, 5.0, 0.0, 2 * M_PI);
+		cr->close_path();
+		cr->fill_preserve();
 	}
 }
 

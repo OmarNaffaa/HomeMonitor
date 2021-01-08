@@ -21,19 +21,20 @@ class ThingSpeak
 {
 public:
 	// Constructor and deconstructor
-	ThingSpeak(char* tsChannel, char* tsKey, char* numRequests);
+	ThingSpeak(string tsChannel, string tsKey, string numRequests);
 	~ThingSpeak();
 
 	// Functions
 	void printData();
 	void getChannelData();
 	string getMostRecentTemp(int fieldNum);
+	string getMostRecentTimestamp();
 	vector<map<string, string>> getFieldResults();
 
 protected:
-	char* thingspeakKey;
-	char* thingspeakChannel;
-	char* thingspeakNumRequests;
+	string thingspeakKey;
+	string thingspeakChannel;
+	string thingspeakNumRequests;
 	map<string, string> currResult;
 	vector<map<string, string>> fieldResults;
 

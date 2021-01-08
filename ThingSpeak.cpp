@@ -10,7 +10,7 @@ namespace
     }
 }
 
-ThingSpeak::ThingSpeak(char* tsChannel, char* tsKey, char* tsRequests) : 
+ThingSpeak::ThingSpeak(string tsChannel, string tsKey, string tsRequests) :
     thingspeakChannel(tsChannel), thingspeakKey(tsKey), thingspeakNumRequests(tsRequests){}
 
 ThingSpeak::~ThingSpeak() {}
@@ -132,6 +132,21 @@ string ThingSpeak::getMostRecentTemp(int fieldNum)
     }
 
     return mostRecentPoint;
+}
+
+string ThingSpeak::getMostRecentTimestamp()
+{
+    string mostRecentTime;
+
+    for (auto& mapItem : fieldResults)
+    {
+        for (auto it = mapItem.cbegin(); it != mapItem.cend(); ++it)
+        {
+            if (it->first == "created_at") mostRecentTime = it->second;
+        }
+    }
+
+    return mostRecentTime;
 }
 
 vector<map<string, string>> ThingSpeak::getFieldResults()

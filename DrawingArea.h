@@ -27,6 +27,7 @@ public:
 	bool toggleField(int fieldNum);
 
 protected:
+	const double M_PI = 3.14159265358979323846;
 	const int dailyPoints = 48;
 	const int weeklyPoints = 336;
 	double numRows, numCols;

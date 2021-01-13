@@ -1,3 +1,5 @@
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup") // hide command line
+
 #include <iostream>
 #include <chrono>
 #include <mutex>
@@ -56,7 +58,8 @@ int main(int argc, char* argv[])
 	auto app = Gtk::Application::create(argc, argv);
 
 	auto mainContainer = Gtk::Box();
-	MainWindow* homepage = new MainWindow("Dashboard");
+	MainWindow* homepage = new MainWindow();
+	homepage->set_title("Home Monitor");
 
 	// Create drawing area and add to container
 	MyArea mArea(12.0, 8.0);

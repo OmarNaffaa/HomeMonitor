@@ -3,7 +3,7 @@
 MainWindow::MainWindow() : screenHeight(480), screenWidth(640)
 {
 	// Initialize the main window
-	this->set_title("Homepage");
+	this->set_title("");
 	this->set_border_width(10);
 	this->set_size_request(screenWidth, screenHeight);
 	this->maximize();
@@ -16,7 +16,6 @@ MainWindow::MainWindow(titleString windowTitle) :
 	this->set_title(screenTitle);
 	this->set_border_width(10);
 	this->set_size_request(screenWidth, screenHeight);
-	this->maximize();
 }
 
 MainWindow::MainWindow(int dispWidth, int dispHeight) :

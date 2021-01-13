@@ -7,11 +7,36 @@ D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\drawi
 D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
 D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\drawingarea.h(115,1): warning C4250: 'Gtk::DrawingArea': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
 D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(113): message : see declaration of 'Gtk::Object::set_manage'
-D:\6_PersonalProjects\HomeMonitor\DrawingArea.h(42,1): warning C4250: 'MyArea': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
+D:\6_PersonalProjects\HomeMonitor\DrawingArea.h(47,1): warning C4250: 'MyArea': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
 D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
-D:\6_PersonalProjects\HomeMonitor\DrawingArea.h(42,1): warning C4250: 'MyArea': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
+D:\6_PersonalProjects\HomeMonitor\DrawingArea.h(47,1): warning C4250: 'MyArea': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
 D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(113): message : see declaration of 'Gtk::Object::set_manage'
-D:\6_PersonalProjects\HomeMonitor\DrawingArea.cpp(97,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+D:\6_PersonalProjects\HomeMonitor\DrawingArea.cpp(103,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\6_PersonalProjects\HomeMonitor\DrawingArea.cpp(107,14): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+D:\6_PersonalProjects\HomeMonitor\DrawingArea.cpp(121,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  MainWindow.cpp
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\widget.h(6020,1): warning C4250: 'Gtk::Widget': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\widget.h(6020,1): warning C4250: 'Gtk::Widget': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(113): message : see declaration of 'Gtk::Object::set_manage'
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\container.h(658,1): warning C4250: 'Gtk::Container': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\container.h(658,1): warning C4250: 'Gtk::Container': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(113): message : see declaration of 'Gtk::Object::set_manage'
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\bin.h(258,1): warning C4250: 'Gtk::Bin': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\bin.h(258,1): warning C4250: 'Gtk::Bin': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(113): message : see declaration of 'Gtk::Object::set_manage'
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\window.h(2487,1): warning C4250: 'Gtk::Window': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\drawingarea.h(115,1): warning C4250: 'Gtk::DrawingArea': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\drawingarea.h(115,1): warning C4250: 'Gtk::DrawingArea': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(113): message : see declaration of 'Gtk::Object::set_manage'
+D:\6_PersonalProjects\HomeMonitor\MainWindow.h(36,1): warning C4250: 'MainWindow': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
+D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
+  ThingSpeak.cpp
+D:\6_PersonalProjects\HomeMonitor\ThingSpeak.cpp(67,31): warning C4018: '<': signed/unsigned mismatch
   main.cpp
 D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\widget.h(6020,1): warning C4250: 'Gtk::Widget': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
 D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
@@ -109,36 +134,13 @@ D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\drawi
 D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(113): message : see declaration of 'Gtk::Object::set_manage'
 D:\6_PersonalProjects\HomeMonitor\MainWindow.h(36,1): warning C4250: 'MainWindow': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
 D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
-D:\6_PersonalProjects\HomeMonitor\DrawingArea.h(42,1): warning C4250: 'MyArea': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
+D:\6_PersonalProjects\HomeMonitor\DrawingArea.h(47,1): warning C4250: 'MyArea': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
 D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
-D:\6_PersonalProjects\HomeMonitor\DrawingArea.h(42,1): warning C4250: 'MyArea': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
+D:\6_PersonalProjects\HomeMonitor\DrawingArea.h(47,1): warning C4250: 'MyArea': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
 D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(113): message : see declaration of 'Gtk::Object::set_manage'
-  MainWindow.cpp
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\widget.h(6020,1): warning C4250: 'Gtk::Widget': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\widget.h(6020,1): warning C4250: 'Gtk::Widget': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(113): message : see declaration of 'Gtk::Object::set_manage'
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\container.h(658,1): warning C4250: 'Gtk::Container': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\container.h(658,1): warning C4250: 'Gtk::Container': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(113): message : see declaration of 'Gtk::Object::set_manage'
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\bin.h(258,1): warning C4250: 'Gtk::Bin': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\bin.h(258,1): warning C4250: 'Gtk::Bin': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(113): message : see declaration of 'Gtk::Object::set_manage'
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\window.h(2487,1): warning C4250: 'Gtk::Window': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\drawingarea.h(115,1): warning C4250: 'Gtk::DrawingArea': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\drawingarea.h(115,1): warning C4250: 'Gtk::DrawingArea': inherits 'Gtk::Object::Gtk::Object::set_manage' via dominance
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(113): message : see declaration of 'Gtk::Object::set_manage'
-D:\6_PersonalProjects\HomeMonitor\MainWindow.h(36,1): warning C4250: 'MainWindow': inherits 'Gtk::Object::Gtk::Object::destroy_notify_' via dominance
-D:\1_College\_RandomItems\vcpkg-master\installed\x64-windows\include\gtkmm\object.h(132): message : see declaration of 'Gtk::Object::destroy_notify_'
-  ThingSpeak.cpp
-D:\6_PersonalProjects\HomeMonitor\ThingSpeak.cpp(67,31): warning C4018: '<': signed/unsigned mismatch
   Generating code
-  636 of 726 functions (87.6%) were compiled, the rest were copied from previous compilation.
-    548 functions were new in current compilation
-    8 functions had inline decision re-evaluated but remain unchanged
+  135 of 771 functions (17.5%) were compiled, the rest were copied from previous compilation.
+    49 functions were new in current compilation
+    36 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   HomeMonitor.vcxproj -> D:\6_PersonalProjects\HomeMonitor\x64\Release\HomeMonitor.exe

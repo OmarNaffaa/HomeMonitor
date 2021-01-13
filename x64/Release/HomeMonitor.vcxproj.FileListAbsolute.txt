@@ -37,3 +37,4 @@ D:\6_PersonalProjects\HomeMonitor\x64\Release\gtkmm.dll
 D:\6_PersonalProjects\HomeMonitor\x64\Release\pangomm.dll
 D:\6_PersonalProjects\HomeMonitor\x64\Release\jsoncpp.dll
 D:\6_PersonalProjects\HomeMonitor\x64\Release\libcurl.dll
+D:\6_PersonalProjects\HomeMonitor\x64\Release\fmt.dll

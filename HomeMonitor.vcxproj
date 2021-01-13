@@ -27,7 +27,17 @@
   <ItemGroup>
     <ClInclude Include="DrawingArea.h" />
     <ClInclude Include="MainWindow.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ThingSpeak.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="icon2.ico" />
+    <Image Include="x64\Release\share\icons\icon\house.ico" />
+    <Image Include="x64\Release\share\icons\icon\house.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -129,7 +139,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>

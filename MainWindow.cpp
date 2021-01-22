@@ -1,16 +1,15 @@
 #include "MainWindow.h"
 
-MainWindow::MainWindow() : screenHeight(480), screenWidth(640)
+MainWindow::MainWindow() : screenHeight(900), screenWidth(1200)
 {
 	// Initialize the main window
 	this->set_title("");
 	this->set_border_width(10);
 	this->set_size_request(screenWidth, screenHeight);
-	this->maximize();
 }
 
 MainWindow::MainWindow(titleString windowTitle) :
-	screenHeight(480), screenWidth(480), screenTitle(windowTitle)
+	screenHeight(900), screenWidth(900), screenTitle(windowTitle)
 {
 	// Initialize the main window
 	this->set_title(screenTitle);

@@ -56,10 +56,11 @@ MyArea* dArea_ref; // used in "onBtn3" and "onBtn4" functions
 int main(int argc, char* argv[])
 {
 	auto app = Gtk::Application::create(argc, argv);
-
 	auto mainContainer = Gtk::Box();
-	MainWindow* homepage = new MainWindow();
-	homepage->set_title("Home Monitor");
+
+	MainWindow* homepage = new MainWindow("Home Monitor");
+	homepage->maximize();
+	homepage->set_position(Gtk::WindowPosition::WIN_POS_CENTER_ALWAYS);
 
 	// Create drawing area and add to container
 	MyArea mArea(12.0, 8.0);

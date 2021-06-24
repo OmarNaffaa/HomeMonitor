@@ -137,7 +137,7 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 	auto vertSpacing = (gridVertBottom - gridVertTop) / tempRange;
 	auto horizSpacing = (gridHorizRight - gridHorizLeft) / (amntOfPoints - 1);
 
-	auto incVal = gridHorizLeft;
+	double incVal;
 
 	cr->set_line_width(3);
 
@@ -145,14 +145,15 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 		Plotting logic for graph
 	*/
 	// Thingspeak field 1
-
 	if (fieldEnable[0] == 1 && field1.size() > 1)
 	{
 		incVal = gridHorizLeft;
 		double currPoint;
 		double prevPoint = gridVertBottom - ((field1[0] - xAxisOffset) * vertSpacing);
 
+		cr->begin_new_path();
 		cr->set_source_rgb(0.0, 0.7, 0.0);
+
 		for (int i = 1; i < field1.size(); ++i)
 		{
 			if (field1[i] > 19) // values must be at least 20
@@ -182,13 +183,15 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 		double currPoint;
 		double prevPoint = gridVertBottom - ((field2[0] - xAxisOffset) * vertSpacing);
 
+		cr->begin_new_path();
 		cr->set_source_rgb(0.7, 0.6, 0.0);
+
 		for (int i = 1; i < field2.size(); ++i)
 		{
 			if (field2[i] > 19) // values must be at least 20
 			{
 				currPoint = gridVertBottom - ((field2[i] - xAxisOffset) * vertSpacing);
-
+				
 				cr->move_to(incVal, prevPoint);
 				cr->arc(incVal, prevPoint, pointRadius, 0.0, 2 * M_PI);
 				cr->close_path();
@@ -201,6 +204,7 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 			}
 		}
 
+		cr->set_source_rgb(0.7, 0.6, 0.0);
 		cr->arc(incVal, prevPoint, (pointRadius + 1.0), 0.0, 2 * M_PI);
 		cr->close_path();
 		cr->fill_preserve();
@@ -266,7 +270,6 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			}
 			catch (const std::invalid_argument& ia)
 			{
-				field1.push_back(-1.0);
 				std::cout << "Field 1 - Invalid Argument: " << ia.what() << '\n';
 			}
 			// ThingSpeak field 2
@@ -277,7 +280,6 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 			}
 			catch (const std::invalid_argument& ia)
 			{
-				field2.push_back(-1.0);
 				std::cout << "Field 2 - Invalid Argument: " << ia.what() << '\n';
 			}
 		}
@@ -290,18 +292,20 @@ void MyArea::getTempRange()
 	lowestTemp = 200.0;
 
 	// search first vector for temperature extremes
-	for (auto& tempPoint : field1)
-	{
-		if (tempPoint > highestTemp) highestTemp = tempPoint;
-		if (tempPoint < lowestTemp) lowestTemp = tempPoint;
-	}
+	if (field1.size() != 0)
+		for (auto& tempPoint : field1)
+		{
+			if (tempPoint > highestTemp) highestTemp = tempPoint;
+			if (tempPoint < lowestTemp) lowestTemp = tempPoint;
+		}
 
 	// search second vector for temperature extremes
-	for (auto& tempPoint : field2)
-	{
-		if (tempPoint > highestTemp) highestTemp = tempPoint;
-		if (tempPoint < lowestTemp) lowestTemp = tempPoint;
-	}
+	if (field1.size() != 0)
+		for (auto& tempPoint : field2)
+		{
+			if (tempPoint > highestTemp) highestTemp = tempPoint;
+			if (tempPoint < lowestTemp) lowestTemp = tempPoint;
+		}
 }
 
 // Obtained online, used for debugging font selection

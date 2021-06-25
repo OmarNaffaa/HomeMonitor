@@ -1,6 +1,7 @@
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup") // hide command line
 
 #include <iostream>
+#include <iomanip>
 #include <chrono>
 #include <mutex>
 
@@ -252,6 +253,16 @@ void onBtn2(MainWindow* window)
 
 	if (timestamp != "")
 	{
+		const int tsTimeDiff = 17;
+		const int hoursInDay = 24;
+		string currTime_server(timestamp.substr(timestamp.find_first_of('T') + 1, 8));
+		string currDate_server = timestamp.substr(0, timestamp.find_first_of('T'));
+
+		int serverTimeHour = stoi(currTime_server.substr(0, 2));
+		int serverTimeAdjustedHour = (serverTimeHour + tsTimeDiff) % hoursInDay;
+
+		dialogText += " \nTime of Last Update (PST): ";
+		dialogText += std::to_string(serverTimeAdjustedHour) + currTime_server.substr(2);
 		dialogText += " \nTime of Last Update (Relative to server): ";
 		dialogText += timestamp.substr(timestamp.find_first_of('T')+1, 8);
 		dialogText += " \nDate of Last Update (Relative to server): ";

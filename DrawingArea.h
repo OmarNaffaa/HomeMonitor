@@ -28,8 +28,6 @@ public:
 
 protected:
 	const double M_PI = 3.14159265358979323846;
-	const int dailyPoints = 48;
-	const int weeklyPoints = 336;
 	double numRows, numCols;
 	float highestTemp, lowestTemp;
 	int fieldEnable[2] = { 1, 0 }; // determines if fields should be plotted

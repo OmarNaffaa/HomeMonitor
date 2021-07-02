@@ -102,7 +102,7 @@ void MyArea::drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int wid
 	float currTemp = highestTemp;
 	float tempIncrement = (highestTemp - lowestTemp) / (numRows - 2);
 
-	if (highestTemp != 0 || lowestTemp != 200 || highestTemp == lowestTemp)
+	if (highestTemp != -200 || lowestTemp != 200 || highestTemp == lowestTemp)
 	{
 		for (int i = (numRows - 2); i >= 0; --i)
 		{
@@ -117,17 +117,13 @@ void MyArea::drawAreaGrid(const Cairo::RefPtr<Cairo::Context>& cr, const int wid
 void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const int width, const int height)
 {
 	// determine graph constants
-	int amntOfPoints = dailyPoints;
+	int amntOfPointsField1 = field1.size();
+	int amntOfPointsField2 = field2.size();
 	float pointRadius = ((numCols - 8.0) < 0.01) ? 4.0 : 0.0;
 
 	getTempRange();
 	float tempRange = highestTemp - lowestTemp;
 	float xAxisOffset = lowestTemp;
-
-	if ((numCols - 8.0) < 0.01)
-		amntOfPoints = dailyPoints;
-	else if ((numCols - 9.0) < 0.01)
-		amntOfPoints = weeklyPoints;
 
 	auto gridHorizLeft = width / numCols;
 	auto gridHorizRight = width - (width / numCols);
@@ -135,7 +131,8 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 	auto gridVertBottom = height - (height / numRows);
 
 	auto vertSpacing = (gridVertBottom - gridVertTop) / tempRange;
-	auto horizSpacing = (gridHorizRight - gridHorizLeft) / (amntOfPoints - 1);
+	auto horizSpacingField1 = (gridHorizRight - gridHorizLeft) / (amntOfPointsField1 - 1);
+	auto horizSpacingField2 = (gridHorizRight - gridHorizLeft) / (amntOfPointsField2 - 1);
 
 	double incVal;
 
@@ -164,10 +161,10 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 				cr->arc(incVal, prevPoint, pointRadius, 0.0, 2*M_PI);
 				cr->close_path();
 				cr->fill_preserve();
-				cr->line_to((incVal + horizSpacing), currPoint);
+				cr->line_to((incVal + horizSpacingField1), currPoint);
 				cr->stroke();
 
-				incVal += horizSpacing;
+				incVal += horizSpacingField1;
 				prevPoint = currPoint;
 			}
 		}
@@ -196,10 +193,10 @@ void MyArea::plotThingSpeakData(const Cairo::RefPtr<Cairo::Context>& cr, const i
 				cr->arc(incVal, prevPoint, pointRadius, 0.0, 2 * M_PI);
 				cr->close_path();
 				cr->fill_preserve();
-				cr->line_to((incVal + horizSpacing), currPoint);
+				cr->line_to((incVal + horizSpacingField2), currPoint);
 				cr->stroke();
 
-				incVal += horizSpacing;
+				incVal += horizSpacingField2;
 				prevPoint = currPoint;
 			}
 		}
@@ -288,7 +285,7 @@ void MyArea::getFieldData(ThingSpeak tsObj)
 
 void MyArea::getTempRange()
 {
-	highestTemp = 0.0;
+	highestTemp = -200.0;
 	lowestTemp = 200.0;
 
 	// search first vector for temperature extremes
@@ -300,7 +297,7 @@ void MyArea::getTempRange()
 		}
 
 	// search second vector for temperature extremes
-	if (field1.size() != 0)
+	if (field2.size() != 0)
 		for (auto& tempPoint : field2)
 		{
 			if (tempPoint > highestTemp) highestTemp = tempPoint;

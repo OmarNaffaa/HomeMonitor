@@ -112,7 +112,7 @@ string ThingSpeak::getMostRecentTemp(int fieldNum)
         {
             for (auto it = mapItem.cbegin(); it != mapItem.cend(); ++it)
             {
-                if (it->first == "field1") mostRecentPoint = it->second;
+                if (it->first == "field1" && it->second != "") mostRecentPoint = it->second;
             }
         }
     }
@@ -122,7 +122,7 @@ string ThingSpeak::getMostRecentTemp(int fieldNum)
         {
             for (auto it = mapItem.cbegin(); it != mapItem.cend(); ++it)
             {
-                if (it->first == "field2") mostRecentPoint = it->second;
+                if (it->first == "field2" && it->second != "") mostRecentPoint = it->second;
             }
         }
     }

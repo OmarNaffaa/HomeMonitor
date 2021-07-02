@@ -242,7 +242,7 @@ void onBtn2(MainWindow* window)
 	if (temp1 != "Invalid Field" && temp1 != "")
 	{
 		dialogText += " \nMost Recent Bedroom Temperature: ";
-		dialogText += temp1 + " degrees fahrenheit\n";
+		dialogText += temp1 + " degrees fahrenheit";
 	}
 
 	if (temp2 != "Invalid Field" && temp2 != "")
